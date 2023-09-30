@@ -26,12 +26,14 @@ const DomainSchema = new mongoose.Schema({
   Pathogen_Protein: {type:String},
   ProteinA: {type:String},
   ProteinB: {type:String},
-  intdb: {type:String},
+  score: {type:Number},
   DomianA_name :{type:String},
+  DomainA_desc:{type:String},
   DomianA_interpro :{type:String},
   DomianB_name :{type:String},
+  DomainB_desc:{type:String},
   DomianB_interpro :{type:String},
-  score: {type:Number},
+  intdb: {type:String},
 });
 
 function getItems(input) {
@@ -131,12 +133,12 @@ router.route('/domain_results/').post(async(req,res) =>{
       size = 10
     }
 
-    const table = 'domain_'+body.intdb.toLowerCase()+'_'+body.species
+    const table = body.species+'_domains'
     console.log(table)
     const limit = parseInt(body.size)
 
     const skip = (page-1) * body.size;
-    const resultsdb = mongoose.connection.useDb("wheatblast")
+    const resultsdb = mongoose.connection.useDb("hpinetdb")
     const Results = resultsdb.model(table, DomainSchema)
     let final;
     let counts;
@@ -147,14 +149,14 @@ router.route('/domain_results/').post(async(req,res) =>{
     console.log(body.genes)
     if (body.genes.length>0){
       if (body.idt==='host'){
-        final = await Results.find({'Host_Protein':{'$in':body.genes}}).limit(limit).skip(skip).exec()
+        final = await Results.find({'Host_Protein':{'$in':body.genes}, 'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
         counts = await Results.count({'Host_Protein':{'$in':body.genes}})
         host_protein =await Results.distinct("Host_Protein")
         pathogen_protein =await Results.distinct('Pathogen_Protein')
       }
       if (body.idt==='pathogen'){
         console.log("yes")
-        final = await Results.find({'Pathogen_Protein':{'$in':body.genes}}).limit(limit).skip(skip).exec()
+        final = await Results.find({'Pathogen_Protein':{'$in':body.genes}, 'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
         
         counts = await Results.count({'Pathogen_Protein':{'$in':body.genes}})
 
@@ -172,8 +174,8 @@ router.route('/domain_results/').post(async(req,res) =>{
     }
 
     if (body.genes.length===0) {
-      final = await Results.find({}).limit(limit).skip(skip).exec()
-      counts = await Results.count()
+      final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
+      counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
       host_protein =await Results.distinct("Host_Protein")
       pathogen_protein =await Results.distinct('Pathogen_Protein')
     }
