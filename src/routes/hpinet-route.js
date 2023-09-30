@@ -188,7 +188,7 @@ router.route('/domain_results/').post(async(req,res) =>{
 router.route('/network/').get(async(req,res) =>{
   let {results} = req.query
 
-    const resultsdb = mongoose.connection.useDb("kbunt_results")
+    const resultsdb = mongoose.connection.useDb("hpinet_results")
     const Results = resultsdb.model(results, wheatSchema)
 
     let final = await Results.find().exec()
