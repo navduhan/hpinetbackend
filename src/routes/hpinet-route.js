@@ -175,8 +175,8 @@ router.route('/domain_results/').post(async(req,res) =>{
 
     if (body.genes.length===0) {
       console.log("i am here")
-      final = await Results.find().limit(limit).skip(skip).exec()
-      counts = await Results.count()
+      final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
+      counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
       host_protein =await Results.distinct("Host_Protein")
       pathogen_protein =await Results.distinct('Pathogen_Protein')
     }
