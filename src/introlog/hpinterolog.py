@@ -53,8 +53,8 @@ def create_connection(db_file):
         print(e)
     return conn
 
-def filter_blast(table,ident, cov, evalue,intdb,genes=None):
-    db = create_connection("wheatblast.db")
+def filter_blast(db,table,ident, cov, evalue,intdb,genes=None):
+    db = create_connection(db)
     if genes !=None:
         st="("
         for id in genes:
@@ -180,16 +180,16 @@ def consensus(interolog, domain):
     return final
 
 def add_results(data):
-    pp =connection('kbunt_results')
-    name = f"kbunt{str(round(time.time() * 1000))}results"
+    pp =connection('hpinet_results')
+    name = f"hpinet{str(round(time.time() * 1000))}results"
     ptable = pp[name]
     ptable.insert_many(data)
 
     return name
 
 def add_noresults(data):
-    pp =connection('kbunt_results')
-    name = f"kbunt{str(round(time.time() * 1000))}results"
+    pp =connection('hpinet_results')
+    name = f"hpinet{str(round(time.time() * 1000))}results"
     ptable = pp[name]
     ptable.insert_one({'result':data})
 
@@ -219,8 +219,8 @@ def main():
     if options.method == 'interolog':
         for hpd in intTables:
 
-            host_blast = filter_blast(options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
-            pathogen_blast = filter_blast(options.pathogentable,options.pi,options.pc,options.pe,hpd, genes=pproteins)
+            host_blast = filter_blast(options.blastdb,options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
+            pathogen_blast = filter_blast(options.blastdb,options.pathogentable,options.pi,options.pc,options.pe,hpd, genes=pproteins)
             
             hd =hpd+'s'
             

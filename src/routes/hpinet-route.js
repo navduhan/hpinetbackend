@@ -76,7 +76,7 @@ router.route('/results/').get(async(req,res) =>{
       const limit = parseInt(size)
 
       const skip = (page-1) * size;
-      const resultsdb = mongoose.connection.useDb("kbunt_results")
+      const resultsdb = mongoose.connection.useDb("hpinet_results")
       const Results = resultsdb.model(results, wheatSchema)
 
       let final = await Results.find({}).limit(limit).skip(skip).exec()
@@ -91,7 +91,7 @@ router.route('/results/').get(async(req,res) =>{
 router.route('/download/').get(async(req,res) =>{
   let {results} = req.query
   
-    const resultsdb = mongoose.connection.useDb("kbunt_results")
+    const resultsdb = mongoose.connection.useDb("hpinet_results")
     const Results = resultsdb.model(results, wheatSchema)
 
     let final = await Results.find({})
@@ -103,10 +103,10 @@ router.route('/download/').get(async(req,res) =>{
 router.route('/domain_download/').get(async(req,res) =>{
   let {species, intdb} = req.query
   
-    const table = 'domain_'+intdb.toLowerCase()+'_'+species
+    const table = species.toLowerCase()+'_domains'
     console.log(table)
     
-    const resultsdb = mongoose.connection.useDb("wheatblast")
+    const resultsdb = mongoose.connection.useDb("hpinetdb")
     const Results = resultsdb.model(table, DomainSchema)
     
     let final = await Results.find({})
