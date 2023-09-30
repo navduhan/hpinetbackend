@@ -133,7 +133,7 @@ router.route('/domain_results/').post(async(req,res) =>{
       size = 10
     }
 
-    const table = body.species+'_domains'
+    const table = body.species.toLowerCase()+'_domains'
     console.log(table)
     const limit = parseInt(body.size)
 
