@@ -69,7 +69,7 @@ def filter_blast(db,table,ident, cov, evalue,intdb,genes=None):
     else:
         query = "SELECT * FROM {} WHERE pident >= {} AND evalue <= {} AND qcovs >= {} AND intdb = '{}' ORDER BY id; ".format(table, ident, evalue, cov, intdb)
         results = db.execute(query).fetchall()
-    # print(results)
+    print(results)
 
     if len(results)>0:
            
