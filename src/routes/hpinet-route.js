@@ -118,7 +118,7 @@ router.route('/domain_download/').get(async(req,res) =>{
 router.route('/domain_results/').post(async(req,res) =>{
 
   const body = JSON.parse(JSON.stringify(req.body));
-  console.log(body);
+  console.log(body.species);
 
   // let {species,page,  size, genes,idt, intdb} = req.query
   let page;
