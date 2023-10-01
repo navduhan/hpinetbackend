@@ -222,7 +222,7 @@ router.route('/go/').get(async(req, res) => {
 
       const skip = (page-1) * size;
 
-      let go_results = await GO[sptype].find({'species':{'$in':species}}).limit(limit).skip(skip).exec()
+      let go_results = await GO[sptype].find({'species':{'$in':species.toLowerCase()}}).limit(limit).skip(skip).exec()
       let total = await GO[sptype].find({'species':{'$in':species}}).count()
       let knum = await GO[sptype].distinct('term')
       console.log(knum.length)
