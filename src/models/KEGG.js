@@ -5,6 +5,7 @@ const KEGGSchema = new mongoose.Schema({
     'gene': {type:String},
     'pathway':{type:String}, 
     'description': {type:String},
+    'species':{type:String},
     
 });
 

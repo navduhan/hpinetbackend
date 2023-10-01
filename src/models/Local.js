@@ -4,6 +4,7 @@ const LocalSchema = new mongoose.Schema({
 
     'gene': {type:String}, 
     'location': {type:String},
+    'species':{type:String},
     
 });
 

@@ -8,19 +8,20 @@ const GOSchema = new mongoose.Schema({
     'definition': {type:String},
     'evidence':{type:String}, 
     'ontology':{type:String},
+    'species':{type:String},
     
 });
 
 
 
 const resultsdb = mongoose.connection.useDb("hpinetdb")
-const GOHost = resultsdb.model('go_hosts', GOSchema)
-const GOPathogen = resultsdb.model('go_pathogens', GOSchema)
+const GOHosts = resultsdb.model('go_hosts', GOSchema)
+const GOPathogens = resultsdb.model('go_pathogens', GOSchema)
 
 
 module.exports ={
-    'host':GOHost,
-    'pathogen':GOPathogen,
+    'host':GOHosts,
+    'pathogen':GOPathogens,
    
 }
 
