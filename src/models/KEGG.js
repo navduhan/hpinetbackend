@@ -8,13 +8,13 @@ const KEGGSchema = new mongoose.Schema({
     
 });
 
-const resultsdb = mongoose.connection.useDb("wheatblast")
-const KEGGAestivums = resultsdb.model('kegg_aestivums', KEGGSchema)
-const KEGGTurgidums = resultsdb.model('kegg_turgidums', KEGGSchema)
-const KEGGTindicas = resultsdb.model('kegg_tindicas', KEGGSchema)
+const resultsdb = mongoose.connection.useDb("hpinetdb")
+const KEGGAestivums = resultsdb.model('kegg_hosts', KEGGSchema)
+const KEGGTurgidums = resultsdb.model('kegg_pathogens', KEGGSchema)
+
 
 module.exports ={
-    'aestivum':KEGGAestivums,
-    'turgidum':KEGGTurgidums,
-    'tindica':KEGGTindicas,
+    'host':KEGGAestivums,
+    'pathogen':KEGGTurgidums,
+    
 }

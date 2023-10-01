@@ -13,15 +13,15 @@ const GOSchema = new mongoose.Schema({
 
 
 
-const resultsdb = mongoose.connection.useDb("wheatblast")
-const GOAestivums = resultsdb.model('go_aestivums', GOSchema)
-const GOTurgidums = resultsdb.model('go_turgidums', GOSchema)
-const GOTindicas = resultsdb.model('go_tindicas', GOSchema)
+const resultsdb = mongoose.connection.useDb("hpinetdb")
+const GOHost = resultsdb.model('go_hosts', GOSchema)
+const GOPathogen = resultsdb.model('go_pathogens', GOSchema)
+
 
 module.exports ={
-    'aestivum':GOAestivums,
-    'turgidum':GOTurgidums,
-    'tindica':GOTindicas,
+    'host':GOHost,
+    'pathogen':GOPathogen,
+   
 }
 
 

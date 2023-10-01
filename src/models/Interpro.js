@@ -16,9 +16,11 @@ const InterproSchema = new mongoose.Schema({
 
 const resultsdb = mongoose.connection.useDb("hpinetdb")
 const InterproAestivums = resultsdb.model('interpro_hosts', InterproSchema)
+const InterproPathogens = resultsdb.model('interpro_pathogens', InterproSchema)
 
 
 module.exports ={
     'host':InterproAestivums,
+    'pathogen':InterproPathogens
     
 }

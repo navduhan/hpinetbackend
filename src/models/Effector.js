@@ -9,11 +9,11 @@ const EffectorSchema = new mongoose.Schema({
     
 });
 
-const resultsdb = mongoose.connection.useDb("wheatblast")
+const resultsdb = mongoose.connection.useDb("hpinetdb")
 
-const EffectorTindicas = resultsdb.model('effector_tindicas', EffectorSchema)
+const EffectorPathogens = resultsdb.model('effector_pathogens', EffectorSchema)
 
 module.exports ={
     
-    'tindica':EffectorTindicas,
+    'pathogen':EffectorPathogens,
 }

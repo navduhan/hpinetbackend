@@ -7,13 +7,13 @@ const LocalSchema = new mongoose.Schema({
     
 });
 
-const resultsdb = mongoose.connection.useDb("wheatblast")
-const LocalAestivums = resultsdb.model('local_aestivums', LocalSchema)
-const LocalTurgidums = resultsdb.model('local_turgidums', LocalSchema)
-const LocalTindicas = resultsdb.model('local_tindicas', LocalSchema)
+const resultsdb = mongoose.connection.useDb("hpinetdb")
+const LocalHosts = resultsdb.model('local_hosts', LocalSchema)
+const LocalPathogens = resultsdb.model('local_pathogens', LocalSchema)
+
 
 module.exports ={
-    'aestivum':LocalAestivums,
-    'turgidum':LocalTurgidums,
-    'tindica':LocalTindicas,
+    'host':LocalHosts,
+    'pathogen':LocalPathogens,
+    
 }
