@@ -3,12 +3,12 @@ const { spawn } = require('child_process');
 const path = require('path');
 const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, pathogen_genes)=>{
 
-let host_genes = host_genes.replace(" ",'')
+let host_genes2 = host_genes.replace(" ",'')
 let output;
 let getS;
-console.log("/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", "--hgenes", host_genes, "--pgenes", pathogen_genes, "--host", hspecies, "--pathogen", pspecies, "--method", method, "--score", score, "--t", threshold )
+console.log("/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", "--hgenes", host_genes2, "--pgenes", pathogen_genes, "--host", hspecies, "--pathogen", pspecies, "--method", method, "--score", score, "--t", threshold )
 
-    getS = spawn('/opt/miniconda3/envs/mlgpu/bin/python3', ["/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", "--hgenes", host_genes, "--pgenes", pathogen_genes, "--host", hspecies, "--pathogen", pspecies, "--method", method, "--score", score, "--t", threshold]);
+    getS = spawn('/opt/miniconda3/envs/mlgpu/bin/python3', ["/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", "--hgenes", host_genes2, "--pgenes", pathogen_genes, "--host", hspecies, "--pathogen", pspecies, "--method", method, "--score", score, "--t", threshold]);
 
 getS.stdout.on('data', (data) => {
 
