@@ -66,7 +66,8 @@ console.log(results)
 
 
     const body = JSON.parse(JSON.stringify(req.body));
-    console.log(body);
+    
+    
   
   //  let results = 'kbunt1653501842990result
   let results = await getGOPPI(body.method,body.hspecies, body.pspecies, body.score, body.threshold, body.host_genes, body.pathogen_genes )

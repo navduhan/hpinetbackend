@@ -10,6 +10,29 @@ import pandas as pd
 import sqlite3
 from sqlite3 import Error
 import time
+import argparse
+
+
+ver= '0.0.1'
+
+parser = argparse.ArgumentParser(description="""goSemSim {} : a python based Go semantic similarity based host-pathogen identification package""".format(ver),
+usage="""%(prog)s [options]""",
+epilog="""Written by Naveen Duhan (naveen.duhan@usu.edu),
+Kaundal Bioinformatics Lab, Utah State University,
+Released under the terms of GNU General Public Licence v3""",    
+formatter_class=argparse.RawTextHelpFormatter )
+
+parser.add_argument("--version", action="version", version= 'goSemSim (version {})'.format(ver), help= "Show version information and exit")
+parser.add_argument("--method", dest='method',help="method")
+parser.add_argument("--host", dest='host', help="Host")
+parser.add_argument("--pathogen", dest='pathogen', help="Pathogen")
+parser.add_argument('--hgenes', dest='hgenes', type=str, help="Genes ids host")
+parser.add_argument('--pgenes', dest='pgenes', type=str, help="Genes ids pathogen")
+parser.add_argument('--score',dest='score', type =str)
+parser.add_argument('--t',dest='threshold')
+
+
+
 
 G = graph.from_resource("go-basic")
 
@@ -82,7 +105,7 @@ def create_connection(db_file):
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
-    conn = create_connection("/home/dock_user/hpinetgosemsim.db")
+    conn = create_connection("hpinetgosemsim.db")
     ht="("
     for id in hgenes:
 
@@ -128,7 +151,7 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
     
     final_results = final_go_semsim[final_go_semsim['Score']>=threshold]
     
-    return final_results
+    return  final_results
 
 
 def add_results(data):
@@ -147,23 +170,18 @@ def add_noresults(data):
 
     return name
 
+options, unknownargs = parser.parse_known_args()
 
-host_genes = sys.argv[1]
-pathogen_genes = sys.argv[2]
-host = sys.argv[3]
-pathogen = sys.argv[4]
-method= sys.argv[5]
-score =sys.argv[6]
-threshold = sys.argv[7]
-
-ptable= f"go_{pathogen}"
-htable= f"go_{host}"
+ptable= f"go_{options.pathogen}"
+htable= f"go_{options.host.lower()}"
+method= options.method
+score = options.score
+threshold = options.threshold
+host_genes = [s.strip() for s in options.hgenes.split(",")]
+pathogen_genes = list(options.pgenes.split(","))
 
 
-try:
-    results = goPPI(ptable,htable,method,score,threshold )
-    rid = add_results(results.to_dict('records'))
-    print(rid)
-except Exception:
-    rid = add_noresults("no results")
-    print(rid)
+results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
+
+rid = add_results(results.to_dict('records'))
+print(rid)
