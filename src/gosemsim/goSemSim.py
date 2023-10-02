@@ -124,11 +124,11 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
 
     hquery = "SELECT * FROM {} WHERE gene IN {}  ".format(htable,ht)
     hresult = conn.execute(hquery).fetchall()
-    host_results = pd.DataFrame(hresult, columns=['gene', 'term'])
+    host_results = pd.DataFrame(hresult, columns=['id', 'gene', 'term'])
     
     pquery = "SELECT * FROM {} WHERE gene IN {}  ".format(ptable,ht)
     presult = conn.execute(pquery).fetchall()
-    pathogen_results = pd.DataFrame(presult, columns=['gene', 'term'])
+    pathogen_results = pd.DataFrame(presult, columns=['id', 'gene', 'term'])
 
     final = []
     c=0
@@ -137,13 +137,13 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
             
             try:
                 
-                vavg = go_score[score](list(line[1].split("|")), list(pline[1].split("|")), go_method[method])
+                vavg = go_score[score](list(line[2].split("|")), list(pline[2].split("|")), go_method[method])
             except Exception:
                 continue
             
         
         
-            final.append([line[0], pline[0],line[1], pline[1], vavg])
+            final.append([line[1], pline[1],line[2], pline[2], vavg])
         print(c)    
         c+=1
 
