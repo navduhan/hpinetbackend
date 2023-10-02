@@ -181,11 +181,11 @@ threshold = options.threshold
 host_genes = options.hgenes
 pathogen_genes = options.pgenes
 
-try:
-    results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
 
-    rid = add_results(results.to_dict('records'))
-    print(rid)
-except Exception:
-    rid = add_noresults("no results")
-    print(rid)
+results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
+
+rid = add_results(results.to_dict('records'))
+print(rid)
+# except Exception:
+#     rid = add_noresults("no results")
+#     print(rid)
