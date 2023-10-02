@@ -178,7 +178,7 @@ htable= f"go_{options.host.lower()}"
 method= options.method
 score = options.score
 threshold = options.threshold
-host_genes = options.hgens
+host_genes = options.hgenes
 pathogen_genes = options.pgenes
 
 try:
