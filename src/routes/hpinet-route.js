@@ -22,6 +22,14 @@ const wheatSchema = new mongoose.Schema({
     PMID: {type:String},
 });
 
+const GOPPISchema = new mongoose.Schema({
+  Host_Protein: {type:String},
+  Pathogen_Protein: {type:String},
+  Host_GO: {type:String},
+  Pathogen_GO: {type:String},
+  score: {type:Number},
+});
+
 const DomainSchema = new mongoose.Schema({
   Host_Protein: {type:String},
   Pathogen_Protein: {type:String},
@@ -77,7 +85,7 @@ console.log(results)
         });
 
 router.route('/results/').get(async(req,res) =>{
-    let {results,page,  size} = req.query
+    let {results,category, page,  size} = req.query
     if(!page){
         page = 1
       }
@@ -89,10 +97,16 @@ router.route('/results/').get(async(req,res) =>{
       }
 
       const limit = parseInt(size)
-
+      let Results =[]
       const skip = (page-1) * size;
       const resultsdb = mongoose.connection.useDb("hpinet_results")
-      const Results = resultsdb.model(results, wheatSchema)
+      if (category ==='interolog'){
+         Results = resultsdb.model(results, wheatSchema)
+      }
+      if (category ==='gosim'){
+        Results = resultsdb.model(results, wheatSchema)
+      }
+     
 
       let final = await Results.find({}).limit(limit).skip(skip).exec()
       let counts = await Results.count()
