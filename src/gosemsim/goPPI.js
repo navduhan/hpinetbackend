@@ -4,9 +4,9 @@ const path = require('path');
 const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, pathogen_genes)=>{
 let output;
 let getS;
-console.log("/opt/web/hpinetdb/hpinetbackend/gosemsim/goSemSim.py", host_genes, pathogen_genes, hspecies, pspecies,method, score,threshold )
+console.log("/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", host_genes, pathogen_genes, hspecies, pspecies,method, score,threshold )
 
-    getS = spawn('/opt/miniconda3/envs/mlgpu/bin/python3', ["/opt/web/hpinetdb/hpinetbackend/gosemsim/goSemSim.py", host_genes, pathogen_genes, hspecies, pspecies,method, score,threshold]);
+    getS = spawn('/opt/miniconda3/envs/mlgpu/bin/python3', ["/opt/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py", host_genes, pathogen_genes, hspecies, pspecies,method, score,threshold]);
 
 getS.stdout.on('data', (data) => {
 
