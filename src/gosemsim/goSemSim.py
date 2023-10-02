@@ -105,7 +105,7 @@ def create_connection(db_file):
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
-    conn = create_connection("hpinetgosemsim.db")
+    conn = create_connection("/home/dock_user/hpinetgosemsim.db")
     ht="("
     for id in hgenes:
 
