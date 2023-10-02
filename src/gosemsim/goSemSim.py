@@ -150,7 +150,7 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
 
     final_go_semsim = pd.DataFrame(final, columns=['Host_Protein', 'Pathogen_Protein', 'Host_GO', 'Pathogen_GO', 'Score'])
     
-    final_results = final_go_semsim[final_go_semsim['Score']>=threshold]
+    final_results = final_go_semsim[float(final_go_semsim['Score'])>=threshold]
     
     return  final_results
 
@@ -177,7 +177,7 @@ ptable= f"go_{options.pathogen}"
 htable= f"go_{options.host.lower()}"
 method= options.method
 score = options.score
-threshold = options.threshold
+threshold = float(options.threshold)
 host_genes = options.hgenes
 pathogen_genes = options.pgenes
 
