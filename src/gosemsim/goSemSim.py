@@ -12,7 +12,8 @@ from sqlite3 import Error
 import time
 import argparse
 
-
+def list_of_strings(arg):
+    return(arg.split(","))
 ver= '0.0.1'
 
 parser = argparse.ArgumentParser(description="""goSemSim {} : a python based Go semantic similarity based host-pathogen identification package""".format(ver),
@@ -26,8 +27,8 @@ parser.add_argument("--version", action="version", version= 'goSemSim (version {
 parser.add_argument("--method", dest='method',help="method")
 parser.add_argument("--host", dest='host', help="Host")
 parser.add_argument("--pathogen", dest='pathogen', help="Pathogen")
-parser.add_argument('--hgenes', dest='hgenes', type=str, help="Genes ids host")
-parser.add_argument('--pgenes', dest='pgenes', type=str, help="Genes ids pathogen")
+parser.add_argument('--hgenes', dest='hgenes', type=list_of_strings, help="Genes ids host")
+parser.add_argument('--pgenes', dest='pgenes', type=list_of_strings, help="Genes ids pathogen")
 parser.add_argument('--score',dest='score', type =str)
 parser.add_argument('--t',dest='threshold')
 
@@ -177,11 +178,14 @@ htable= f"go_{options.host.lower()}"
 method= options.method
 score = options.score
 threshold = options.threshold
-host_genes = [s.strip() for s in options.hgenes.split(",")]
-pathogen_genes = list(options.pgenes.split(","))
+host_genes = options.hgens
+pathogen_genes = options.pgenes
 
+try:
+    results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
 
-results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
-
-rid = add_results(results.to_dict('records'))
-print(rid)
+    rid = add_results(results.to_dict('records'))
+    print(rid)
+except Exception:
+    rid = add_noresults("no results")
+    print(rid)
