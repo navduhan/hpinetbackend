@@ -382,8 +382,8 @@ router.route('/effector/').get(async(req, res) => {
 
       const skip = (page-1) * size;
 
-      let effector_results = await Effector['pathogen'].find({'type':{'$in':species}}).limit(limit).skip(skip).exec()
-      let total = await Effector['pathogen'].find({'type':{'$in':species}}).count()
+      let effector_results = await Effector['pathogen'].find(query).limit(limit).skip(skip).exec()
+      let total = await Effector['pathogen'].find(query).count()
       console.log(effector_results)
       res.json({'data':effector_results, 'total':total})
 
