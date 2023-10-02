@@ -8,6 +8,7 @@ const Local = require("../models/Local");
 const TF = require("../models/TF");
 const Effector =require("../models/Effector");
 const mongoose = require('mongoose');
+const getGOPPI = require("../gosemsim/goPPI")
 
 const wheatSchema = new mongoose.Schema({
     Host_Protein: {type:String},
@@ -60,6 +61,19 @@ let results = await getPPI(body.category,body.hspecies, body.pspecies, body.hi, 
 console.log(results)
  
       });
+
+  router.route('/goppi').post(async(req, res) => {
+
+
+    const body = JSON.parse(JSON.stringify(req.body));
+    console.log(body);
+  
+  //  let results = 'kbunt1653501842990result
+  let results = await getPPI(body.method,body.hspecies, body.pspecies, body.score, body.threshold, body.host_genes, body.pathogen_genes )
+    res.json(results)
+  console.log(results)
+    
+        });
 
 router.route('/results/').get(async(req,res) =>{
     let {results,page,  size} = req.query
