@@ -69,7 +69,7 @@ console.log(results)
     console.log(body);
   
   //  let results = 'kbunt1653501842990result
-  let results = await getPPI(body.method,body.hspecies, body.pspecies, body.score, body.threshold, body.host_genes, body.pathogen_genes )
+  let results = await getGOPPI(body.method,body.hspecies, body.pspecies, body.score, body.threshold, body.host_genes, body.pathogen_genes )
     res.json(results)
   console.log(results)
     
