@@ -151,7 +151,7 @@ def add_noresults(data):
 host_genes = sys.argv[1]
 pathogen_genes = sys.argv[2]
 host = sys.argv[3]
-pathogen = sys.srgv[4]
+pathogen = sys.argv[4]
 method= sys.argv[5]
 score =sys.argv[6]
 threshold = sys.argv[7]
