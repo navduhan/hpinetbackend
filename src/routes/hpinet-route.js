@@ -9,7 +9,7 @@ const TF = require("../models/TF");
 const Effector =require("../models/Effector");
 const mongoose = require('mongoose');
 const getGOPPI = require("../gosemsim/goPPI")
-const _ = require("underscore");
+const countBy = require("underscore");
 const wheatSchema = new mongoose.Schema({
     Host_Protein: {type:String},
     Pathogen_Protein: {type:String},
@@ -208,10 +208,12 @@ router.route('/domain_results/').post(async(req,res) =>{
       console.log("i am here")
       final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
       // console.log(final)
-      host_protein = _countBy(final,function(data){ return data.Host_Protein; })
-      pathogen_protein = _countBy(final,function(data){ return data.Pathogen_Protein; })
-      console.log(host_protein)
-      counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
+     
+      let fd = await Results.find({'intdb':{'$in':body.intdb}})
+      counts = data.keys(fd.shareInfo[i]).length
+      host_protein =[... new Set(fd.map(data => data.Host_Protein))]
+      pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
+     
       // counts = data.keys(data.shareInfo[i]).length
       // host_protein = await Results.find({'intdb':{'$in':body.intdb}}).distinct("Host_Protein")
       // // pathogen_protein =await Results.find({'intdb':{'$in':body.intdb}}).distinct('Pathogen_Protein')
