@@ -210,7 +210,7 @@ router.route('/domain_results/').post(async(req,res) =>{
       // console.log(final)
      
       let fd = await Results.find({'intdb':{'$in':body.intdb}})
-      counts = data.keys(fd.shareInfo[i]).length
+      counts = await Results.find({'intdb':{'$in':body.intdb}}).counts()
       host_protein =[... new Set(fd.map(data => data.Host_Protein))]
       pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
       console.log(host_protein)
