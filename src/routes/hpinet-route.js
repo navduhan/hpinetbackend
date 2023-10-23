@@ -147,7 +147,7 @@ router.route('/domain_download/').get(async(req,res) =>{
 router.route('/domain_results/').post(async(req,res) =>{
 
   const body = JSON.parse(JSON.stringify(req.body));
-  console.log(body.species);
+  // console.log(body.species);
 
   // let {species,page,  size, genes,idt, intdb} = req.query
   let page;
@@ -175,7 +175,7 @@ router.route('/domain_results/').post(async(req,res) =>{
     let pathogen_protein;
 
     console.log(body.idt)
-    console.log(body.genes)
+    console.log(body.intdb)
     if (body.genes.length>0){
       if (body.idt==='host'){
         final = await Results.find({'Host_Protein':{'$in':body.genes}, 'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
