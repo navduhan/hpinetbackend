@@ -213,7 +213,7 @@ router.route('/domain_results/').post(async(req,res) =>{
       counts = data.keys(fd.shareInfo[i]).length
       host_protein =[... new Set(fd.map(data => data.Host_Protein))]
       pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
-     
+      console.log(host_protein)
       // counts = data.keys(data.shareInfo[i]).length
       // host_protein = await Results.find({'intdb':{'$in':body.intdb}}).distinct("Host_Protein")
       // // pathogen_protein =await Results.find({'intdb':{'$in':body.intdb}}).distinct('Pathogen_Protein')
