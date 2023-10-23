@@ -182,6 +182,7 @@ router.route('/domain_results/').post(async(req,res) =>{
         counts = await Results.count({'Host_Protein':{'$in':body.genes}})
         host_protein =await Results.distinct("Host_Protein")
         pathogen_protein =await Results.distinct('Pathogen_Protein')
+        res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
       }
       if (body.idt==='pathogen'){
         // console.log("yes")
@@ -198,6 +199,7 @@ router.route('/domain_results/').post(async(req,res) =>{
         console.log(host_protein.length)
         pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
         // console.log(pathogen_protein)
+        res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
       }
       
     }
@@ -207,12 +209,13 @@ router.route('/domain_results/').post(async(req,res) =>{
       final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
       console.log(final)
       counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
-      host_protein =await Results.distinct("Host_Protein")
-      pathogen_protein =await Results.distinct('Pathogen_Protein')
+      host_protein =await Results.find({'intdb':{'$in':body.intdb}}).distinct("Host_Protein")
+      pathogen_protein =await Results.find({'intdb':{'$in':body.intdb}}).distinct('Pathogen_Protein')
+      res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
     }
     
     
-    res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+    // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
 
 })
 router.route('/network/').get(async(req,res) =>{
