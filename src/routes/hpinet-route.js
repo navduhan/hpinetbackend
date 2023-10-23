@@ -215,12 +215,10 @@ router.route('/domain_results/').post(async(req,res) =>{
       pathogen_protein =await Results.distinct('Pathogen_Protein', {'intdb':{'$in':body.intdb}})
       console.log(host_protein.length)
       // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
-      host_protein = 10
-      pathogen_protein = 5
     }
     
     
-    res.json({'results':final,'total':counts,'hostcount':host_protein,'pathogencount':pathogen_protein})
+    res.json({'results':final,'total':counts})
 
 })
 router.route('/network/').get(async(req,res) =>{
