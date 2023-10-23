@@ -9,7 +9,6 @@ const TF = require("../models/TF");
 const Effector =require("../models/Effector");
 const mongoose = require('mongoose');
 const getGOPPI = require("../gosemsim/goPPI")
-const countBy = require("underscore");
 const wheatSchema = new mongoose.Schema({
     Host_Protein: {type:String},
     Pathogen_Protein: {type:String},
@@ -182,7 +181,7 @@ router.route('/domain_results/').post(async(req,res) =>{
         counts = await Results.count({'Host_Protein':{'$in':body.genes}})
         host_protein =await Results.distinct("Host_Protein")
         pathogen_protein =await Results.distinct('Pathogen_Protein')
-        res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+
       }
       if (body.idt==='pathogen'){
         // console.log("yes")
@@ -199,7 +198,7 @@ router.route('/domain_results/').post(async(req,res) =>{
         console.log(host_protein.length)
         pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
         // console.log(pathogen_protein)
-        res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+      
       }
       
     }
@@ -209,20 +208,17 @@ router.route('/domain_results/').post(async(req,res) =>{
       final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
       // console.log(final)
      
-      let fd = await Results.find({'intdb':{'$in':body.intdb}})
       counts = await Results.find({'intdb':{'$in':body.intdb}}).counts()
-      host_protein =[... new Set(fd.map(data => data.Host_Protein))]
-      pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
-      console.log(host_protein)
+    
       // counts = data.keys(data.shareInfo[i]).length
-      // host_protein = await Results.find({'intdb':{'$in':body.intdb}}).distinct("Host_Protein")
-      // // pathogen_protein =await Results.find({'intdb':{'$in':body.intdb}}).distinct('Pathogen_Protein')
-     
-      res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+      host_protein = await Results.distinct("Host_Protein", {'intdb':{'$in':body.intdb}})
+      pathogen_protein =await Results.distinct('Pathogen_Protein', {'intdb':{'$in':body.intdb}})
+      console.log(host_protein)
+      // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
     }
     
     
-    // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+    res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
 
 })
 router.route('/network/').get(async(req,res) =>{
