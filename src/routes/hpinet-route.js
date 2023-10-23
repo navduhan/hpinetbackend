@@ -220,7 +220,7 @@ router.route('/domain_results/').post(async(req,res) =>{
     }
     
     
-    res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+    res.json({'results':final,'total':counts,'hostcount':host_protein,'pathogencount':pathogen_protein})
 
 })
 router.route('/network/').get(async(req,res) =>{
@@ -232,7 +232,6 @@ router.route('/network/').get(async(req,res) =>{
     let final = await Results.find().exec()
     let counts = await Results.count()
     let host_protein =await Results.distinct("Host_Protein")
-   
     let pathogen_protein =await Results.distinct('Pathogen_Protein')
     res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
 
