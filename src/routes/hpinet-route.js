@@ -207,13 +207,13 @@ router.route('/domain_results/').post(async(req,res) =>{
       console.log("i am here")
       final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
       // console.log(final)
-      // host_protein = await Results.distinct("Host_Protein")
+      host_protein = await Results.distinct("Host_Protein")
       // pathogen_protein =await Results.distinct("Pathogen_Protein")
       counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
       console.log(`"I am here" counts`)
       // // counts = data.keys(data.shareInfo[i]).length
 
-      // console.log(host_protein.length)
+      console.log(host_protein.length)
       // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
     }
     
