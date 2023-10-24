@@ -17,7 +17,8 @@ const accessControl = (req,  res, next) => {
   }
   */
   res.header('Access-Control-Allow-Origin', 'http://localhost:3810');
-  // res.header('Access-Control-Allow-Origin', 'http://bioinfo.usu.edu');
+  res.header('Access-Control-Allow-Origin', 'https://bioinfo.usu.edu');
+  res.header('Access-Control-Allow-Origin', 'https://kaabil.net');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, KBL-User-Agent');
   res.header('Access-Control-Allow-Credentials', 'true');
