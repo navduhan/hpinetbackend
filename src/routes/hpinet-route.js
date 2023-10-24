@@ -207,51 +207,22 @@ router.route('/domain_results/').post(async(req,res) =>{
       console.log("i am here")
       final = await Results.find({'intdb':{'$in':body.intdb}}).limit(limit).skip(skip).exec()
       // console.log(final)
-      // host_protein = await Results.distinct("Host_Protein",{'intdb':{'$in':body.intdb}})
-      // pathogen_protein =await Results.distinct("Pathogen_Protein", {'intdb':{'$in':body.intdb}})
+      host_protein = await Results.distinct("Host_Protein",{'intdb':{'$in':body.intdb}})
+      pathogen_protein =await Results.distinct("Pathogen_Protein", {'intdb':{'$in':body.intdb}})
       counts = await Results.find({'intdb':{'$in':body.intdb}}).count()
       console.log(`"I am here" counts`)
       // // counts = data.keys(data.shareInfo[i]).length
 
-      // console.log(pathogen_protein.length)
-      // console.log(host_protein.length)
+      console.log(pathogen_protein.length)
+      console.log(host_protein.length)
       // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
     }
     
     
-    res.json({'results':final,'total':counts})
+    res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
 
 })
-router.route('/domain_unique').post(async(req,res)=>{
-  const body = JSON.parse(JSON.stringify(req.body));
-  // let {species,page,  size, genes,idt, intdb} = req.query
-  let page;
-  let size;
-  if(!body.page){
-      page = 1 
-    }
-   if (body.page){
-     page = parseInt(body.page) + 1
-   }
-    if (!body.size){
-      size = 10
-    }
 
-    const table = body.species.toLowerCase()+'_domains'
-    console.log(table)
-    const limit = parseInt(body.size)
-
-    const skip = (page-1) * body.size;
-    const resultsdb = mongoose.connection.useDb("hpinetdb")
-    const Results = resultsdb.model(table, DomainSchema)
-   
-    let host_protein;
-    let pathogen_protein;
-    host_protein = await Results.distinct("Host_Protein",{'intdb':{'$in':body.intdb}})
-    pathogen_protein =await Results.distinct("Pathogen_Protein", {'intdb':{'$in':body.intdb}})
-    res.json({'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
-
-})
 router.route('/network/').get(async(req,res) =>{
   let {results} = req.query
 
