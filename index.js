@@ -8,7 +8,7 @@ const routes =require('./src/routes/hpinet-route')
 
 
 app.use(express.urlencoded({extended:true}))
-app.use(cors("https://bioinfo.usu.edu"))
+app.use(cors("*"))
 app.use(express.json())
 
 
