@@ -222,6 +222,36 @@ router.route('/domain_results/').post(async(req,res) =>{
     res.json({'results':final,'total':counts})
 
 })
+router.route('/domain_unique').post(async(req,res)=>{
+  const body = JSON.parse(JSON.stringify(req.body));
+  // let {species,page,  size, genes,idt, intdb} = req.query
+  let page;
+  let size;
+  if(!body.page){
+      page = 1 
+    }
+   if (body.page){
+     page = parseInt(body.page) + 1
+   }
+    if (!body.size){
+      size = 10
+    }
+
+    const table = body.species.toLowerCase()+'_domains'
+    console.log(table)
+    const limit = parseInt(body.size)
+
+    const skip = (page-1) * body.size;
+    const resultsdb = mongoose.connection.useDb("hpinetdb")
+    const Results = resultsdb.model(table, DomainSchema)
+   
+    let host_protein;
+    let pathogen_protein;
+    host_protein = await Results.distinct("Host_Protein",{'intdb':{'$in':body.intdb}})
+    pathogen_protein =await Results.distinct("Pathogen_Protein", {'intdb':{'$in':body.intdb}})
+    res.json({'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
+
+})
 router.route('/network/').get(async(req,res) =>{
   let {results} = req.query
 
