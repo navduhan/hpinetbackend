@@ -8,31 +8,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   console.log(host_genes2);
 
   // Initialize variables
-  let output;
-
-
-  // Log the command that will be executed
-  console.log(
-    "/opt/miniconda3/envs/ml-gpu/bin/python3",
-    [
-      "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
-      "--hgenes",
-      host_genes2,
-      "--pgenes",
-      pathogen_genes,
-      "--host",
-      hspecies,
-      "--pathogen",
-      pspecies,
-      "--method",
-      method,
-      "--score",
-      score,
-      "--t",
-      threshold
-    ].join(" ") // Combine command arguments into a string
-  );
-
+  let output = '';
   const commandArgs = [
     "/opt/miniconda3/envs/ml-gpu/bin/python3",
     "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
@@ -48,25 +24,28 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   // Spawn a Python process to run the script
   const getS = spawn(commandArgs[0], commandArgs.slice(1));
   // Handle stdout data
-  getS.stdout.on('data', (data) => {
-    output = data.toString();
-    console.log('output was generated: ' + output);
+  const stdoutPromise = new Promise((resolve) => {
+    getS.stdout.on('data', (data) => {
+      output += data.toString();
+      console.log('output was generated: ' + data.toString());
+    });
+    getS.stdout.on('end', () => {
+      resolve();
+    });
   });
-
-  getS.stdin.setEncoding = 'utf-8';
 
   // Handle stderr data
-  getS.stderr.on('data', (data) => {
-    console.log('error: ' + data);
+  const stderrPromise = new Promise((resolve) => {
+    getS.stderr.on('data', (data) => {
+      console.log('error: ' + data);
+    });
+    getS.stderr.on('end', () => {
+      resolve();
+    });
   });
 
-  return new Promise((resolve, reject) => {
-    getS.stdout.on('end', async function (code) {
-
-        const resultData = output;
-            
-            resolve(resultData);
-    });
+  return Promise.all([stdoutPromise, stderrPromise]).then(() => {
+    return output;
   });
 };
 
