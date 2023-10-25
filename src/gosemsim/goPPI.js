@@ -9,7 +9,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
 
   // Initialize variables
   let output;
-  let getS;
+
 
   // Log the command that will be executed
   console.log(
@@ -34,7 +34,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   );
 
   // Spawn a Python process to run the script
-  getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', [
+  const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', [
     "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
     "--hgenes",
     host_genes2,
