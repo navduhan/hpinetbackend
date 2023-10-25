@@ -174,14 +174,14 @@ router.route('/domain_results/').post(async (req, res) => {
     const skip = (page - 1) * size;
     const resultsdb = mongoose.connection.useDb("hpinetdb");
     const Results = resultsdb.model(table, DomainSchema);
-
+    const genes =  JSON.parse(body.genes);
     const query = { intdb: { $in: body.intdb } };
 
     if (body.genes.length > 0) {
       if (body.idt === 'host') {
-        query.Host_Protein = { $in: body.genes.toString() };
+        query.Host_Protein = { $in: genes };
       } else if (body.idt === 'pathogen') {
-        query.Pathogen_Protein = { $in: body.genes.toString() };
+        query.Pathogen_Protein = { $in: genes};
       }
     }
    console.log(query)
