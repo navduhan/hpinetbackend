@@ -233,9 +233,11 @@ def main():
     except Exception:
         rid = add_noresults("no results")
         print(rid)
+    host_fasta_out = host_fasta.split("/")[1]
+    pathogen_fasta_out = pathogen_fasta.split("/")[1]
     for i in range(1, genomeNumber):
-        os.remove(os.path.join(os.getcwd(),f"host/{host_fasta}_blast_{i}.txt"))
-        os.remove(os.path.join(os.getcwd(),f"pathogen/{pathogen_fasta}_blast_{i}.txt"))
+        os.remove(os.path.join(os.getcwd(),f"host/{host_fasta_out}_blast_{i}.txt"))
+        os.remove(os.path.join(os.getcwd(),f"pathogen/{pathogen_fasta_out}_blast_{i}.txt"))
     os.remove(host_fasta)
     os.remove(pathogen_fasta)
     return 
