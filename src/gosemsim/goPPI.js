@@ -8,7 +8,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   console.log(host_genes2);
 
   // Initialize variables
-  let output;
+  let output ='';
 
 
   // Log the command that will be executed
@@ -51,7 +51,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   
   // Handle stdout data
   getS.stdout.on('data', (data) => {
-    output = data.toString();
+    output += data.toString();
     console.log('output was generated: ' + output);
   });
 

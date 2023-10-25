@@ -1,4 +1,3 @@
-from pygosemsim import download
 from pygosemsim import graph
 import networkx as nx
 from pygosemsim import similarity
@@ -32,11 +31,6 @@ parser.add_argument('--hgenes', dest='hgenes', type=list_of_strings, help="Genes
 parser.add_argument('--pgenes', dest='pgenes', type=list_of_strings, help="Genes ids pathogen")
 parser.add_argument('--score',dest='score', type =str)
 parser.add_argument('--t',dest='threshold')
-
-
-
-
-
 
 
 def sim_max(terms1, terms2, method, G):
@@ -105,8 +99,8 @@ def create_connection(db_file):
     return conn
 
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
-    # G = graph.from_resource("go-basic")
-    G = pickle.load(open("/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/graph.pickle",'rb'))
+    G = graph.from_resource("go-basic")
+    # G = pickle.load(open("/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/graph.pickle",'rb'))
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
     conn = create_connection("/home/dock_user/hpinetgosemsim.db")
