@@ -139,17 +139,33 @@ router.route('/download/').get(async (req, res) => {
 })
 
 router.route('/domain_download/').get(async (req, res) => {
-  let { species, intdb } = req.query
+  try {
+    const body = req.body;
+    const table = body.species.toLowerCase() + '_domains';
+    const resultsdb = mongoose.connection.useDb("hpinetdb");
+    const Results = resultsdb.model(table, DomainSchema);
+    
+    const query = { intdb: { $in: body.intdb } };
 
-  const table = species.toLowerCase() + '_domains'
-  const query = { intdb: { $in: intdb } };
-
-  const resultsdb = mongoose.connection.useDb("hpinetdb")
-  const Results = resultsdb.model(table, DomainSchema)
-
-  let final = await Results.find(query)
-
-  res.json({ 'results': final })
+    if (body.genes.length > 0) {
+      if (body.idt === 'host') {
+        query.Host_Protein = { $in: body.genes };
+      } else if (body.idt === 'pathogen') {
+        query.Pathogen_Protein = { $in: body.genes};
+      }
+    }
+   console.log(query)
+    const [final] = await Promise.all([
+      Results.find(query),
+    ]);
+    
+    res.json({
+      results: final,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 
 })
 
