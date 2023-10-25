@@ -40,7 +40,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
       if (!output.startsWith('hpinet')) {
         resolve(output);
       } else {
-        setTimeout(checkOutput, 100); // Check again after a short delay
+        setTimeout(checkOutput, 100000); // Check again after a short delay
       }
     };
     checkOutput();
