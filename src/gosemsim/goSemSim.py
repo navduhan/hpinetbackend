@@ -32,7 +32,7 @@ parser.add_argument('--pgenes', dest='pgenes', type=list_of_strings, help="Genes
 parser.add_argument('--score',dest='score', type =str)
 parser.add_argument('--t',dest='threshold')
 
-G = pickle.load(open("/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/graph.pickle",'rb'))
+# G = pickle.load(open("/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/graph.pickle",'rb'))
 def sim_max(terms1, terms2, method, G):
     """Similarity score between two term sets based on maximum value
     """
@@ -99,7 +99,7 @@ def create_connection(db_file):
     return conn
 
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
-    # G = graph.from_resource("go-basic")
+    G = graph.from_resource("go-basic")
 
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
@@ -134,7 +134,7 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
             
             try:
                 
-                vavg = go_score[score](list(line[2].split("|")), list(pline[2].split("|")), go_method[method])
+                vavg = go_score[score](list(line[2].split("|")), list(pline[2].split("|")), go_method[method],G)
             except Exception:
                 continue
             
