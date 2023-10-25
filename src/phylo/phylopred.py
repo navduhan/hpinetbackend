@@ -196,8 +196,8 @@ def main():
     
     options, unknownargs = parser.parse_known_args() 
     
-    host = os.path.join(os.getcwd(), 'data/'+ options.host + '.fa')
-    pathogen =os.path.join(os.getcwd(), 'data/'+ options.pathogen + '.fa')
+    host = os.path.join(os.getcwd(), 'src/phylo/data/'+ options.host + '.fa')
+    pathogen =os.path.join(os.getcwd(), 'src/phylo/data/'+ options.pathogen + '.fa')
     hgenes = options.hgenes
     pgenes = options.pgenes
     hi = options.hi
@@ -212,8 +212,8 @@ def main():
     host_fasta = host + "_temp.fa"
     pathogen_fasta = pathogen + "_temp.fa"
 
-    host_fasta_out = os.path.join(os.getcwd(), 'host/'+ options.host)
-    pathogen_fasta_out = os.path.join(os.getcwd(), 'pathogen/'+ options.pathogen)
+    host_fasta_out = os.path.join(os.getcwd(), 'src/phylo/host/'+ options.host)
+    pathogen_fasta_out = os.path.join(os.getcwd(), 'src/phylo/pathogen/'+ options.pathogen)
 
     
     
