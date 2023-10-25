@@ -67,22 +67,22 @@ def get_sequences(hgenes,pgenes, host, pathogen):
 def select_pool(pool):
     
     if pool =='UP82':
-        df = pd.read_csv("modelPool.txt", sep="\t", names=['genome'])
+        df = pd.read_csv("src/phylo/modelPool.txt", sep="\t", names=['genome'])
         poolList= df['genome'].values.tolist()
         genomeNumber = len(poolList)
-        poolFolder = "dbs/phyloModelSC"
+        poolFolder = "src/phylo/dbs/phyloModelSC"
         nullPool  = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     if pool == 'BC18':
-        df = pd.read_csv("bioconductorPool.txt", sep="\t", names=['genome'])
+        df = pd.read_csv("src/phylo/bioconductorPool.txt", sep="\t", names=['genome'])
         poolList= df['genome'].values.tolist()
         genomeNumber = len(poolList)
-        poolFolder = "dbs/phyloBioconductor"
+        poolFolder = "src/phylo/dbs/phyloBioconductor"
         nullPool  = "000000000000000000"
     if pool == 'protphylo490':
-        df = pd.read_csv("modelPool.txt", sep="\t", names=['genome'])
+        df = pd.read_csv("src/phylomodelPool.txt", sep="\t", names=['genome'])
         poolList= df['genome'].values.tolist()
         genomeNumber = len(poolList)
-        poolFolder = "dbs/phyloBioconductor"
+        poolFolder = "src/phylo/dbs/phyloBioconductor"
         nullPool ='0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
         
     return genomeNumber, poolFolder, poolList, nullPool
