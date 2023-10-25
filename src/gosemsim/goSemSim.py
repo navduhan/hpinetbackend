@@ -168,22 +168,26 @@ def add_noresults(data):
     ptable.insert_one({'result':data})
 
     return name
+def main():
+    options, unknownargs = parser.parse_known_args()
 
-options, unknownargs = parser.parse_known_args()
+    ptable= f"go_{options.pathogen}"
+    htable= f"go_{options.host.lower()}"
+    method= options.method
+    score = options.score
+    threshold = float(options.threshold)
+    host_genes = options.hgenes
+    pathogen_genes = options.pgenes
 
-ptable= f"go_{options.pathogen}"
-htable= f"go_{options.host.lower()}"
-method= options.method
-score = options.score
-threshold = float(options.threshold)
-host_genes = options.hgenes
-pathogen_genes = options.pgenes
+    try:
+        results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
 
-try:
-    results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
+        rid = add_results(results.to_dict('records'))
+        print(rid)
+    except Exception:
+        rid = add_noresults("no results")
+        print(rid)
+    return
 
-    rid = add_results(results.to_dict('records'))
-    print(rid)
-except Exception:
-    rid = add_noresults("no results")
-    print(rid)
+if __name__ == '__main__':
+    main()
