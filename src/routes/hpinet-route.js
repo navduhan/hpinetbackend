@@ -174,7 +174,7 @@ router.route('/domain_results/').post(async (req, res) => {
     const skip = (page - 1) * size;
     const resultsdb = mongoose.connection.useDb("hpinetdb");
     const Results = resultsdb.model(table, DomainSchema);
-    const genes =  JSON.parse(body.genes);
+    const genes = body.genes[0].split(',');
     const query = { intdb: { $in: body.intdb } };
 
     if (body.genes.length > 0) {
