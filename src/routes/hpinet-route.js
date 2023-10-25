@@ -148,68 +148,47 @@ router.route('/domain_download/').get(async (req, res) => {
 })
 
 router.route('/domain_results/').post(async (req, res) => {
+  try {
+    const body = req.body;
+    const page = parseInt(body.page) || 1;
+    const size = parseInt(body.size) || 10;
+    const table = body.species.toLowerCase() + '_domains';
+    const limit = size;
+    const skip = (page - 1) * size;
+    const resultsdb = mongoose.connection.useDb("hpinetdb");
+    const Results = resultsdb.model(table, DomainSchema);
 
-  let body = JSON.parse(JSON.stringify(req.body));
+    const query = { intdb: { $in: body.intdb } };
 
-  let page;
-  let size;
-  if (!body.page) {
-    page = 1
-  }
-  if (body.page) {
-    page = parseInt(body.page) + 1
-  }
-  if (!body.size) {
-    size = 10
-  }
-
-  const table = body.species.toLowerCase() + '_domains'
-  console.log(table)
-  const limit = parseInt(body.size)
-
-  const skip = (page - 1) * body.size;
-  const resultsdb = mongoose.connection.useDb("hpinetdb")
-  const Results = resultsdb.model(table, DomainSchema)
-  let final;
-  let counts;
-  let host_protein;
-  let pathogen_protein;
-
-  console.log(body.idt)
-  console.log(body.intdb)
-  if (body.genes.length > 0) {
-    if (body.idt === 'host') {
-      final = await Results.find({ 'Host_Protein': { '$in': body.genes }, 'intdb': { '$in': body.intdb } }).limit(limit).skip(skip).exec()
-      counts = await Results.count({ 'Host_Protein': { '$in': body.genes } })
-      let fd = await Results.find({ 'Host_Protein': { '$in': body.genes } })
-      host_protein = [... new Set(fd.map(data => data.Host_Protein))]
-      pathogen_protein = [... new Set(fd.map(data => data.Pathogen_Protein))]
-
+    if (body.genes.length > 0) {
+      if (body.idt === 'host') {
+        query.Host_Protein = { $in: body.genes };
+      } else if (body.idt === 'pathogen') {
+        query.Pathogen_Protein = { $in: body.genes };
+      }
     }
-    if (body.idt === 'pathogen') {
-      final = await Results.find({ 'Pathogen_Protein': { '$in': body.genes }, 'intdb': { '$in': body.intdb } }).limit(limit).skip(skip).exec()
-      counts = await Results.count({ 'Pathogen_Protein': { '$in': body.genes } })
-      let fd = await Results.find({ 'Pathogen_Protein': { '$in': body.genes } })
-      host_protein = [... new Set(fd.map(data => data.Host_Protein))]
-      pathogen_protein = [... new Set(fd.map(data => data.Pathogen_Protein))]
 
-    }
+    const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
+      Results.find(query).limit(limit).skip(skip).lean().exec(),
+      Results.count(query),
+      Results.distinct("Host_Protein", query),
+      Results.distinct("Pathogen_Protein", query),
+    ]);
+
+    res.json({
+      results: final,
+      total: counts,
+      hostcount: hostProtein.length,
+      pathogencount: pathogenProtein.length,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
   }
-  else {
-    console.log("i am here")
-    final = await Results.find({ 'intdb': { '$in': body.intdb } }).limit(limit).skip(skip).exec()
-    counts = await Results.find({ 'intdb': { '$in': body.intdb } }).count()
-    // host_protein = await Results.distinct("Host_Protein", { 'intdb': { '$in': body.intdb } })
-    // pathogen_protein =await Results.distinct("Pathogen_Protein", { 'intdb': { '$in': body.intdb } })
-    
+});
 
-  
-    // res.json({'results':final,'total':counts,'hostcount':host_protein.length,'pathogencount':pathogen_protein.length})
-  }
 
-  res.json({ 'results': final, 'total': counts })
 
-})
 
 router.route('/network/').get(async (req, res) => {
   let { results } = req.query
