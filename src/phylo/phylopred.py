@@ -87,11 +87,9 @@ def select_pool(pool):
         
     return genomeNumber, poolFolder, poolList, nullPool
 
-def run_blast(genomeNumber,poolFolder, poolList,host_fasta, pathogen_fasta, evalue, pevalue):
+def run_blast(genomeNumber,poolFolder, poolList,host_fasta, pathogen_fasta, evalue, pevalue, host_fasta_out, pathogen_fasta_out):
     host_files =[]
     pathogen_files = []
-    host_fasta_out = host_fasta.split("/")[1]
-    pathogen_fasta_out = pathogen_fasta.split("/")[1]
     for i in range(1, genomeNumber):
         host_files.append(f"host/{host_fasta_out}_blast_{i}.txt")
         pathogen_files.append(f"pathogen/{pathogen_fasta_out}_blast_{i}.txt")
@@ -198,8 +196,8 @@ def main():
     
     options, unknownargs = parser.parse_known_args() 
     
-    host = 'data/'+ options.host + '.fa'
-    pathogen ='data/'+ options.pathogen + '.fa' 
+    host = os.path.join(os.getcwd(), 'data/'+ options.host + '.fa')
+    pathogen =os.path.join(os.getcwd(), 'data/'+ options.pathogen + '.fa')
     hgenes = options.hgenes
     pgenes = options.pgenes
     hi = options.hi
@@ -213,12 +211,17 @@ def main():
     
     host_fasta = host + "_temp.fa"
     pathogen_fasta = pathogen + "_temp.fa"
+
+    host_fasta_out = os.path.join(os.getcwd(), 'host/'+ options.host)
+    pathogen_fasta_out = os.path.join(os.getcwd(), 'pathogen/'+ options.pathogen)
+
+    
     
     hostIDs, pathogenIDs, numberHost, numberPathogen, pattern_host, pattern_pathogen = get_sequences(hgenes, pgenes,host,pathogen)
     
     genomeNumber, poolFolder,poolList, nullPool = select_pool(pool)
     
-    host_files, pathogen_files = run_blast(genomeNumber, poolFolder, poolList, host_fasta, pathogen_fasta, he, pe)
+    host_files, pathogen_files = run_blast(genomeNumber, poolFolder, poolList, host_fasta, pathogen_fasta, he, pe, host_fasta_out, pathogen_fasta_out)
     
     pattern_host, pattern_pathogen = fill_pattern(pattern_host, pattern_pathogen, host_files, pathogen_files, numberHost, hostIDs, numberPathogen, pathogenIDs, hi,hc,pi,pc)
     
@@ -233,8 +236,7 @@ def main():
     except Exception:
         rid = add_noresults("no results")
         print(rid)
-    host_fasta_out = host_fasta.split("/")[1]
-    pathogen_fasta_out = pathogen_fasta.split("/")[1]
+   
     for i in range(1, genomeNumber):
         os.remove(os.path.join(os.getcwd(),f"host/{host_fasta_out}_blast_{i}.txt"))
         os.remove(os.path.join(os.getcwd(),f"pathogen/{pathogen_fasta_out}_blast_{i}.txt"))
