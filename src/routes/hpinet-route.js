@@ -184,7 +184,7 @@ router.route('/domain_results/').post(async (req, res) => {
         query.Pathogen_Protein = { $in: body.genes };
       }
     }
-
+   console.log(query)
     const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
       Results.count(query),
