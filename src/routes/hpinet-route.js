@@ -8,7 +8,8 @@ const Local = require("../models/Local");
 const TF = require("../models/TF");
 const Effector =require("../models/Effector");
 const mongoose = require('mongoose');
-const getGOPPI = require("../gosemsim/goPPI")
+const getGOPPI = require("../gosemsim/goPPI");
+const getphyloPPI = require("../phylo/phylo");
 const wheatSchema = new mongoose.Schema({
     Host_Protein: {type:String},
     Pathogen_Protein: {type:String},
@@ -82,6 +83,18 @@ console.log(results)
   console.log(results)
     
         });
+
+        router.route('/phyloppi').post(async(req, res) => {
+
+          const body = JSON.parse(JSON.stringify(req.body));
+          
+          // genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi,pc,pe
+        //  let results = 'kbunt1653501842990result
+        let results = await getphyloPPI(body.method,body.hspecies, body.pspecies, body.host_genes, body.pathogen_genes, body.hi, body.hc,body.he,body.pi,body.pc,body.pe )
+          res.json(results)
+        console.log(results)
+          
+              });
 
 router.route('/results/').get(async(req,res) =>{
     let {results,category, page,  size} = req.query
