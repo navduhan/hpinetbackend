@@ -46,9 +46,17 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
 
   return new Promise((resolve, reject) => {
     getS.stdout.on('end', async function (code) {
-      const resultData = output.split('\n');
-      console.log(resultData[0]);
-      resolve(resultData[0]);
+        if (typeof output === 'string') {
+            
+            const resultData = output.split('\n');
+            
+            resolve(resultData[0]);
+            // Now you can use the resultData array
+          } else {
+            console.error("Output is not a valid string.");
+          }
+         
+   
     });
   });
 };
