@@ -138,7 +138,7 @@ router.route('/download/').get(async (req, res) => {
 
 })
 
-router.route('/domain_download/').get(async (req, res) => {
+router.route('/domain_download/').post(async (req, res) => {
   try {
     const body = req.body;
     const table = body.species.toLowerCase() + '_domains';
