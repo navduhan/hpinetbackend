@@ -29,9 +29,9 @@ return new Promise((res, rej) => {
 
     getS.stdout.on('end', async function (code) {
 
-    const rid = output.split('\n')
-    console.log(rid[0])
-    res(rid[0])
+    const rid = output
+    console.log(rid)
+    res(rid)
     })
  });
 
