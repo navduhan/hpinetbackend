@@ -33,42 +33,39 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
     ].join(" ") // Combine command arguments into a string
   );
 
-  // Spawn a Python process to run the script
-  const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', [
+  const commandArgs = [
+    "/opt/miniconda3/envs/ml-gpu/bin/python3",
     "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
-    "--hgenes",
-    host_genes2,
-    "--pgenes",
-    pathogen_genes,
-    "--host",
-    hspecies,
-    "--pathogen",
-    pspecies,
-    "--method",
-    method,
-    "--score",
-    score,
-    "--t",
-    threshold
-  ]);
+    "--hgenes", host_genes2,
+    "--pgenes", pathogen_genes,
+    "--host", hspecies,
+    "--pathogen", pspecies,
+    "--method", method,
+    "--score", score,
+    "--t", threshold
+  ];
 
-  // Handle standard output from the Python process
+  // Spawn a Python process to run the script
+  const getS = spawn(commandArgs[0], commandArgs.slice(1));
+  // Handle stdout data
   getS.stdout.on('data', (data) => {
     output = data.toString();
     console.log('output was generated: ' + output);
   });
 
-  // Handle standard error from the Python process
+  getS.stdin.setEncoding = 'utf-8';
+
+  // Handle stderr data
   getS.stderr.on('data', (data) => {
     console.log('error: ' + data);
   });
 
-  // Return a Promise to resolve when the process ends
-  return new Promise((res, rej) => {
+  return new Promise((resolve, reject) => {
     getS.stdout.on('end', async function (code) {
-      const rid = output;
-      console.log(rid);
-      res(rid); // Assuming you want to resolve the first character of the output
+
+        const resultData = output;
+            
+            resolve(resultData);
     });
   });
 };
