@@ -1,5 +1,5 @@
-# from pygosemsim import graph
-# import networkx as nx
+from pygosemsim import graph
+import networkx as nx
 from pygosemsim import similarity
 # from pygosemsim import term_set
 import pandas as pd
