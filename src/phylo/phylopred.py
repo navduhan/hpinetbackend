@@ -90,12 +90,14 @@ def select_pool(pool):
 def run_blast(genomeNumber,poolFolder, poolList,host_fasta, pathogen_fasta, evalue, pevalue):
     host_files =[]
     pathogen_files = []
+    host_fasta_out = host_fasta.split("/")[1]
+    pathogen_fasta_out = pathogen_fasta.split("/")[1]
     for i in range(1, genomeNumber):
         host_files.append(f"host/{host_fasta}_blast_{i}.txt")
         pathogen_files.append(f"pathogen/{pathogen_fasta}_blast_{i}.txt")
         # print(f"working on genome {i}")
-        cmd = f"diamond blastp --db {poolFolder}/{poolList[i]} -q {host_fasta} --evalue {evalue} --out host/{host_fasta}_blast_{i}.txt --outfmt 6 qseqid sseqid pident evalue bitscore qcovhsp -k 1 --threads 6"
-        pcmd =f"diamond blastp --db {poolFolder}/{poolList[i]} -q {pathogen_fasta} --evalue {pevalue} --out pathogen/{pathogen_fasta}_blast_{i}.txt --outfmt 6 qseqid sseqid pident evalue bitscore qcovhsp -k 1 --threads 6"
+        cmd = f"diamond blastp --db {poolFolder}/{poolList[i]} -q {host_fasta} --evalue {evalue} --out host/{host_fasta_out}_blast_{i}.txt --outfmt 6 qseqid sseqid pident evalue bitscore qcovhsp -k 1 --threads 6"
+        pcmd =f"diamond blastp --db {poolFolder}/{poolList[i]} -q {pathogen_fasta} --evalue {pevalue} --out pathogen/{pathogen_fasta_out}_blast_{i}.txt --outfmt 6 qseqid sseqid pident evalue bitscore qcovhsp -k 1 --threads 6"
         with open(os.path.join(os.getcwd(), "host.out"), 'w+') as fout:
             with open(os.path.join(os.getcwd(), "host.err"), 'w+') as ferr:
                 job_id= subprocess.call(cmd, shell=True, stdout=fout,stderr=ferr)
