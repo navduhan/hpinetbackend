@@ -30,6 +30,15 @@ const GOPPISchema = new mongoose.Schema({
   score: { type: Number },
 });
 
+const PhyloPPISchema = new mongoose.Schema({
+  Host_Protein: { type: String },
+  Pathogen_Protein: { type: String },
+  Score: { type: Number },
+  Host_Pattern: { type: String },
+  Pathogen_Pattern: { type: String },
+  
+});
+
 const DomainSchema = new mongoose.Schema({
   Host_Protein: { type: String },
   Pathogen_Protein: { type: String },
@@ -89,36 +98,44 @@ router.route('/phyloppi').post(async (req, res) => {
 });
 
 router.route('/results/').get(async (req, res) => {
-  let { results, category, page, size } = req.query
-  if (!page) {
-    page = 1
-  }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 1000
-  }
+  try {
+    const { results, category, page, size } = req.query;
+    const pageInt = parseInt(page) || 1;
+    const sizeInt = parseInt(size) || 1000;
+    const skip = (pageInt - 1) * sizeInt;
 
-  const limit = parseInt(size)
-  let Results = []
-  const skip = (page - 1) * size;
-  const resultsdb = mongoose.connection.useDb("hpinet_results")
-  if (category === 'interolog') {
-    Results = resultsdb.model(results, wheatSchema)
+    const resultsdb = mongoose.connection.useDb("hpinet_results");
+    let ResultsModel;
+
+    if (category === 'interolog') {
+      ResultsModel = resultsdb.model(results, wheatSchema);
+    } else if (category === 'gosim') {
+      ResultsModel = resultsdb.model(results, GOPPISchema);
+    } else if (category === 'phylo') {
+      ResultsModel = resultsdb.model(results, PhyloPPISchema);
+    } else {
+      return res.status(400).json({ error: 'Invalid category' });
+    }
+
+    const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
+      ResultsModel.find({}).limit(sizeInt).skip(skip).exec(),
+      ResultsModel.countDocuments(),
+      ResultsModel.distinct("Host_Protein"),
+      ResultsModel.distinct("Pathogen_Protein"),
+    ]);
+
+    res.json({
+      results: final,
+      total: counts,
+      hostcount: hostProtein.length,
+      pathogencount: pathogenProtein.length,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
   }
-  if (category === 'gosim') {
-    Results = resultsdb.model(results, wheatSchema)
-  }
+});
 
-  let final = await Results.find({}).limit(limit).skip(skip).exec()
-  let counts = await Results.count()
-  let host_protein = await Results.distinct("Host_Protein")
-
-  let pathogen_protein = await Results.distinct('Pathogen_Protein')
-  res.json({ 'results': final, 'total': counts, 'hostcount': host_protein.length, 'pathogencount': pathogen_protein.length })
-
-})
 
 router.route('/download/').get(async (req, res) => {
   let { results } = req.query
@@ -136,12 +153,12 @@ router.route('/domain_download/').get(async (req, res) => {
   let { species, intdb } = req.query
 
   const table = species.toLowerCase() + '_domains'
-  console.log(table)
+  const query = { intdb: { $in: intdb } };
 
   const resultsdb = mongoose.connection.useDb("hpinetdb")
   const Results = resultsdb.model(table, DomainSchema)
 
-  let final = await Results.find({})
+  let final = await Results.find(query)
 
   res.json({ 'results': final })
 
