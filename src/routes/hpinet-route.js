@@ -54,17 +54,6 @@ const DomainSchema = new mongoose.Schema({
   intdb: { type: String },
 });
 
-function getItems(input) {
-  var arr = input, obj = {};
-  for (var i = 0; i < arr.length; i++) {
-    if (!obj[arr[i].name]) {
-      obj[arr[i].name] = 1;
-    } else if (obj[arr[i].name]) {
-      obj[arr[i].name] += 1;
-    }
-  }
-  return obj;
-}
 
 router.route('/ppi').post(async (req, res) => {
 

@@ -47,7 +47,7 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
   return new Promise((resolve, reject) => {
     getS.stdout.on('end', async function (code) {
         if (typeof output === 'string') {
-            
+            console.log(output)
             const resultData = output.split('\n');
             
             resolve(resultData[0]);
