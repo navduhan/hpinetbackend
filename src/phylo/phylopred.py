@@ -196,8 +196,8 @@ def main():
     
     options, unknownargs = parser.parse_known_args() 
     
-    host = options.host + '.fa'
-    pathogen = options.pathogen + '.fa' 
+    host = 'data/'+ options.host + '.fa'
+    pathogen ='data/'+ options.pathogen + '.fa' 
     hgenes = options.hgenes
     pgenes = options.pgenes
     hi = options.hi
