@@ -238,9 +238,8 @@ def main():
         print(rid)
    
     for i in range(1, genomeNumber):
-        os.remove(os.path.join(os.getcwd(),f"host/{host_fasta_out}_blast_{i}.txt"))
-        os.remove(os.path.join(os.getcwd(),f"pathogen/{pathogen_fasta_out}_blast_{i}.txt"))
-    os.remove(host_fasta)
+        f"{host_fasta_out}_blast_{i}.txt"
+        f"{pathogen_fasta_out}_blast_{i}.txt"
     os.remove(pathogen_fasta)
     return 
     
