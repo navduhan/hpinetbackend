@@ -47,7 +47,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
 
 //   console.log(commandArgs.slice[1])
   // Spawn a Python process to run the script
-  const getS = spawn(commandArgs[0], commandArgs.slice(1), {shell: true, stdio: 'inherit'});
+  const getS = spawn(commandArgs[0], commandArgs.slice(1), {shell: true});
   
   // Handle stdout data
   getS.stdout.on('data', (data) => {
