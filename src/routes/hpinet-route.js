@@ -179,9 +179,9 @@ router.route('/domain_results/').post(async (req, res) => {
 
     if (body.genes.length > 0) {
       if (body.idt === 'host') {
-        query.Host_Protein = { $in: body.genes };
+        query.Host_Protein = { $in: body.genes.toString() };
       } else if (body.idt === 'pathogen') {
-        query.Pathogen_Protein = { $in: body.genes };
+        query.Pathogen_Protein = { $in: body.genes.toString() };
       }
     }
    console.log(query)
@@ -191,6 +191,7 @@ router.route('/domain_results/').post(async (req, res) => {
       Results.distinct("Host_Protein", query),
       Results.distinct("Pathogen_Protein", query),
     ]);
+    
 
     res.json({
       results: final,
