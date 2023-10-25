@@ -11,6 +11,7 @@ import sqlite3
 from sqlite3 import Error
 import time
 import argparse
+import pickle
 
 def list_of_strings(arg):
     return(arg.split(","))
@@ -104,7 +105,8 @@ def create_connection(db_file):
     return conn
 
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
-    G = graph.from_resource("go-basic")
+    # G = graph.from_resource("go-basic")
+    G = pickle.load(open("graph.pickle",'rb'))
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
     conn = create_connection("/home/dock_user/hpinetgosemsim.db")
