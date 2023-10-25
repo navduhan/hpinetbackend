@@ -158,8 +158,8 @@ router.route('/domain_download/').get(async(req,res) =>{
  
 router.route('/domain_results/').post(async(req,res) =>{
 
-  const body = JSON.parse(JSON.stringify(req.body));
-  // console.log(body.species);
+  let body = JSON.parse(JSON.stringify(req.body));
+  body = null;
 
   // let {species,page,  size, genes,idt, intdb} = req.query
   let page;
@@ -208,7 +208,6 @@ router.route('/domain_results/').post(async(req,res) =>{
 
         // console.log(final)
         host_protein =[... new Set(fd.map(data => data.Host_Protein))]
-        console.log(host_protein.length)
         pathogen_protein =[... new Set(fd.map(data => data.Pathogen_Protein))]
         // console.log(pathogen_protein)
       
