@@ -25,28 +25,25 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   const getS = spawn(commandArgs[0], commandArgs.slice(1));
 
   // Handle stdout data
-  const stdoutPromise = new Promise((resolve) => {
-    getS.stdout.on('data', (data) => {
-      output += data.toString();
-      console.log('output was generated: ' + data.toString());
-    });
-    getS.stdout.on('end', () => {
-      resolve();
-    });
+  getS.stdout.on('data', (data) => {
+    output += data.toString();
+    console.log('output was generated: ' + data.toString());
   });
 
   // Handle stderr data
-  const stderrPromise = new Promise((resolve) => {
-    getS.stderr.on('data', (data) => {
-      console.log('error: ' + data);
-    });
-    getS.stderr.on('end', () => {
-      resolve();
-    });
+  getS.stderr.on('data', (data) => {
+    console.log('error: ' + data);
   });
 
-  return Promise.all([stdoutPromise, stderrPromise]).then(() => {
-    return output;
+  return new Promise((resolve, reject) => {
+    const checkOutput = () => {
+      if (!output.startsWith('hpinet')) {
+        resolve(output);
+      } else {
+        setTimeout(checkOutput, 100); // Check again after a short delay
+      }
+    };
+    checkOutput();
   });
 };
 
