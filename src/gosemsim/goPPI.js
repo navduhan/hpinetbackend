@@ -68,7 +68,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
     getS.stdout.on('end', async function (code) {
       const rid = output;
       console.log(rid);
-      res(rid[0]); // Assuming you want to resolve the first character of the output
+      res(rid); // Assuming you want to resolve the first character of the output
     });
   });
 };
