@@ -1,7 +1,7 @@
-from pygosemsim import graph
-import networkx as nx
+# from pygosemsim import graph
+# import networkx as nx
 from pygosemsim import similarity
-from pygosemsim import term_set
+# from pygosemsim import term_set
 import pandas as pd
 import sys
 from pymongo import MongoClient
@@ -178,7 +178,6 @@ def main():
 
     try:
         results = goPPI(ptable,htable,host_genes, pathogen_genes,method,score,threshold )
-
         rid = add_results(results.to_dict('records'))
         print(rid)
     except Exception:
