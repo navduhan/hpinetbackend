@@ -35,10 +35,10 @@ parser.add_argument('--t',dest='threshold')
 
 
 
-G = graph.from_resource("go-basic")
 
 
-def sim_max(terms1, terms2, method):
+
+def sim_max(terms1, terms2, method, G):
     """Similarity score between two term sets based on maximum value
     """
     sims = []
@@ -49,7 +49,7 @@ def sim_max(terms1, terms2, method):
                 sims.append(sim)
     return round(max(sims), 3)
 
-def sim_bma(terms1, terms2, method):
+def sim_bma(terms1, terms2, method,G):
     """Similarity between two term sets based on Best-Match Average (BMA)
     """
     sims = []
@@ -73,7 +73,7 @@ def sim_bma(terms1, terms2, method):
         return
     return round(sum(sims) / len(sims), 3)
 
-def sim_avg(terms1, terms2, method):
+def sim_avg(terms1, terms2, method, G):
     """Similarity between two term sets based on average
     """
     sims = []
@@ -104,6 +104,7 @@ def create_connection(db_file):
     return conn
 
 def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
+    G = graph.from_resource("go-basic")
     go_method = {'wang': similarity.wang, 'lowest_common_ancestor': similarity.lowest_common_ancestor, 'resnik': similarity.resnik, 'lin': similarity.lin, 'pekar':similarity.pekar}
     go_score = {'bma': sim_bma, 'avg':sim_avg, 'max':sim_max}
     conn = create_connection("/home/dock_user/hpinetgosemsim.db")
@@ -137,7 +138,7 @@ def goPPI(ptable,htable, hgenes, pgenes, method, score, threshold):
             
             try:
                 
-                vavg = go_score[score](list(line[2].split("|")), list(pline[2].split("|")), go_method[method])
+                vavg = go_score[score](list(line[2].split("|")), list(pline[2].split("|")), go_method[method],G)
             except Exception:
                 continue
             
