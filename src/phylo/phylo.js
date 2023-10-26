@@ -6,8 +6,9 @@ const getphyloPPI = async (genomePool, hspecies, pspecies, host_genes, pathogen_
 
   const host_genes2 = host_genes.replace(" ", '');
   const pathogen_genes2 = pathogen_genes.replace(" ", '');
+  console.log("starting")
   const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold], { shell: true });
-
+console.log("executed script")
   // Use a promise to handle the output of the spawned process
   const outputPromise = new Promise((resolve, reject) => {
     getS.stdout.on('data', (data) => {
@@ -27,7 +28,7 @@ const getphyloPPI = async (genomePool, hspecies, pspecies, host_genes, pathogen_
 
   // Wait for the output of the spawned process and return it
   const output = await outputPromise;
-
+  console.log(output)
   // Return the output rid
   return output;
 };
