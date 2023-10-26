@@ -17,6 +17,7 @@ const buildCmd = (phyloConfig) => {
   const threshold = phyloConfig['threshold'];
 
   console.log(`python3 / home / dock_user / web / hpinetdb / hpinetbackend / src / phylo / phylopred.py--gp ${genomePool} --h ${hspecies} --p ${pspecies} --hg ${host_genes} --pg ${pathogen_genes} --hi ${hi} --hc ${hc} --he ${he} --pi ${pi} --pc ${pc} --pe ${pe} --t ${threshold}`)
+  
   const cmdMap = {
     'gp': genomePool,
     'h': hspecies,
@@ -33,7 +34,7 @@ const buildCmd = (phyloConfig) => {
   }
 
   let cmd = ['/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py']
-  for (let [key, val] in cmdMap.entries()) {
+  for (let [key, val] of Object.entries(cmdMap)) {
     cmd.push(`--${key}`);
     cmd.push(val);
   }
