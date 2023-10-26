@@ -79,8 +79,20 @@ router.route('/phyloppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
 
-  let results = await getphyloPPI(body.method, body.hspecies, body.pspecies, body.host_genes, body.pathogen_genes, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.threshold)
-  console.log("finsihed getting results")
+  let results = await getphyloPPI({
+    'genomePool': body.method, 
+    'hspecies': body.hspecies, 
+    'pspecies': body.pspecies, 
+    'host_genes': body.host_genes, 
+    'pathogen_genes': body.pathogen_genes, 
+    'hi': body.hi, 
+    'hc': body.hc, 
+    'he': body.he, 
+    'pi': body.pi, 
+    'pc': body.pc, 
+    'pe': body.pe, 
+    'threshold': body.threshold
+  });
   res.json(results)
  
 
