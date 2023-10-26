@@ -196,7 +196,7 @@ router.route('/domain_results/').post(async (req, res) => {
     
     const query = { intdb: { $in: body.intdb } };
 
-    if (body.genes.length > 0) {
+    if (body.genes &&  body.genes.length > 0) {
       if (body.idt === 'host') {
         query.Host_Protein = { $in: body.genes };
       } else if (body.idt === 'pathogen') {
