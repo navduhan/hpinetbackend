@@ -225,17 +225,17 @@ def main():
     
     pattern_host, pattern_pathogen = fill_pattern(pattern_host, pattern_pathogen, host_files, pathogen_files, numberHost, hostIDs, numberPathogen, pathogenIDs, hi,hc,pi,pc)
     
-    try:
-        results = get_ppi(numberHost, numberPathogen, pattern_host, pattern_pathogen, nullPool, hostIDs, pathogenIDs, genomeNumber)
-    
-        results['Score'] = results['Score'].apply(custom_to_float)
-        results = results[results['Score']>=float(threshold)]
-        rid = add_results(results.to_dict('records'))
-        print(rid)
+    # try:
+    results = get_ppi(numberHost, numberPathogen, pattern_host, pattern_pathogen, nullPool, hostIDs, pathogenIDs, genomeNumber)
+
+    results['Score'] = results['Score'].apply(custom_to_float)
+    results = results[results['Score']>=float(threshold)]
+    rid = add_results(results.to_dict('records'))
+    print(rid)
         
-    except Exception:
-        rid = add_noresults("no results")
-        print(rid)
+    # except Exception:
+    #     rid = add_noresults("no results")
+    #     print(rid)
    
     for i in range(1, genomeNumber):
         f"{host_fasta_out}_blast_{i}.txt"
