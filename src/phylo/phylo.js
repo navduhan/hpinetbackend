@@ -1,40 +1,36 @@
 const { spawn } = require('child_process');
 
 const path = require('path');
-const getphyloPPI = (genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi,pc,pe, threshold)=>{
 
-const host_genes2 = host_genes.replace(" ",'')
-const pathogen_genes2 = pathogen_genes.replace(" ","")
-console.log(host_genes2)
-let output;
-let getS;
-console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
+const getphyloPPI = async (genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi,pc,pe, threshold) => {
 
-    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold],  {shell: true});
+  const host_genes2 = host_genes.replace(" ", '');
+  const pathogen_genes2 = pathogen_genes.replace(" ", '');
 
-getS.stdout.on('data', (data) => {
+  const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold], { shell: true });
 
-    output = data.toString();
+  // Use a promise to handle the output of the spawned process
+  const outputPromise = new Promise((resolve, reject) => {
+    getS.stdout.on('data', (data) => {
+      resolve(data.toString());
+    });
 
-    console.log('output was generated: ' + output);
-});
+    getS.stderr.on('data', (data) => {
+      reject(new Error(data));
+    });
 
-getS.stdin.setEncoding = 'utf-8';
+    getS.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error('phylopred.py exited with code ' + code));
+      }
+    });
+  });
 
-getS.stderr.on('data', (data) => {
-    
-    console.log('error:' + data);
-});
-return new Promise((res, rej) => {
+  // Wait for the output of the spawned process and return it
+  const output = await outputPromise;
 
-    getS.stdout.on('end', async function (code) {
+  // Return the output rid
+  return output;
+};
 
-    const rid = output
-    console.log(rid)
-    res(rid)
-    })
- });
-
-}
-
-module.exports = getphyloPPI
+module.exports = getphyloPPI;
