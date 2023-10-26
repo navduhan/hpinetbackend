@@ -151,13 +151,13 @@ def fill_pattern(pattern_host, pattern_pathogen, host_files, pathogen_files, num
 def get_ppi(numberHost, numberPathogen, pattern_host, pattern_pathogen, nullPool, hostIDs, pathogenIDs, genomeNumber):
     result=[]
     for i in range(numberHost):
-        if nullPool!=pattern_host[i]:
+        if nullPool != pattern_host[i]:
             for k in range(numberPathogen):
-                # print(f"working on {i}-{k}")
-                host=hostIDs[i]
-                pathogen=pathogenIDs[k]
-                sim =(genomeNumber - Levenshtein.distance(pattern_host[i], pattern_pathogen[k]))/genomeNumber
-                result.append([host,pathogen,sim, pattern_host[i], pattern_pathogen[k]])
+                if nullPool != pattern_pathogen[i]:       
+                    host=hostIDs[i]
+                    pathogen=pathogenIDs[k]
+                    sim =(genomeNumber - Levenshtein.distance(pattern_host[i], pattern_pathogen[k]))/genomeNumber
+                    result.append([host,pathogen,sim, pattern_host[i], pattern_pathogen[k]])
                 
     results = pd.DataFrame(result, columns=['Host_Protein', 'Pathogen_Protein', 'Score', 'Host_Pattern', 'Pathogen_Pattern'])
     
