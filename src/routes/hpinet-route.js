@@ -94,6 +94,7 @@ router.route('/phyloppi').post(async (req, res) => {
     'threshold': body.threshold
   });
   res.json(results)
+  console.log("sent results")
  
 
 });
