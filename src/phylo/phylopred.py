@@ -215,19 +215,18 @@ def main():
     host_fasta_out = os.path.join(os.getcwd(), 'src/phylo/host/'+ options.host)
     pathogen_fasta_out = os.path.join(os.getcwd(), 'src/phylo/pathogen/'+ options.pathogen)
 
-    
-    
     hostIDs, pathogenIDs, numberHost, numberPathogen, pattern_host, pattern_pathogen = get_sequences(hgenes, pgenes,host,pathogen)
     
     genomeNumber, poolFolder,poolList, nullPool = select_pool(pool)
-    
+
     host_files, pathogen_files = run_blast(genomeNumber, poolFolder, poolList, host_fasta, pathogen_fasta, he, pe, host_fasta_out, pathogen_fasta_out)
-    
+    print("I am here died")
     pattern_host, pattern_pathogen = fill_pattern(pattern_host, pattern_pathogen, host_files, pathogen_files, numberHost, hostIDs, numberPathogen, pathogenIDs, hi,hc,pi,pc)
     
+    print("I am here died")
     # try:
     results = get_ppi(numberHost, numberPathogen, pattern_host, pattern_pathogen, nullPool, hostIDs, pathogenIDs, genomeNumber)
-
+    print("I am here died")
     results['Score'] = results['Score'].apply(custom_to_float)
     results = results[results['Score']>=float(threshold)]
     rid = add_results(results.to_dict('records'))
