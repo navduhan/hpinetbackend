@@ -72,4 +72,38 @@ const getphyloPPI = async (phyloConfig) => {
   return output;
 };
 
-module.exports = getphyloPPI;
+
+
+
+
+const getphyloPPI2 = (phyloConfig) => {
+    const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', buildCmd(phyloConfig), { shell: true });
+  
+    console.log("executed script");
+    let data = '';
+  
+    // Use event handlers to handle the output of the spawned process
+    getS.stdout.on('data', (chunk) => {
+      data += chunk.toString();
+    });
+  
+    getS.stderr.on('data', (data) => {
+      throw new Error(data);
+    });
+  
+    // Return a promise that resolves when the process is finished
+    return new Promise((resolve, reject) => {
+      getS.on('close', (code) => {
+        if (code !== 0) {
+          reject(new Error('phylopred.py exited with code ' + code));
+        } else {
+          resolve(data);
+        }
+      });
+    }).then((output) => {
+      console.log(output);
+      return output;
+    });
+  };
+
+  module.exports = getphyloPPI2;
