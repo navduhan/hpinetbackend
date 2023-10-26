@@ -229,7 +229,7 @@ def main():
         results = get_ppi(numberHost, numberPathogen, pattern_host, pattern_pathogen, nullPool, hostIDs, pathogenIDs, genomeNumber)
     
         results['Score'] = results['Score'].apply(custom_to_float)
-        
+        results = results[results['Score']>=float(threshold)]
         rid = add_results(results.to_dict('records'))
         print(rid)
         
