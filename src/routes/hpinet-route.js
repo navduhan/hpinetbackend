@@ -76,7 +76,7 @@ router.route('/goppi').post(async (req, res) => {
 });
 
 router.route('/phyloppi').post(async (req, res) => {
-
+  req.setTimeout(5*60*1000)
   const body = JSON.parse(JSON.stringify(req.body));
 
   let results = await getphyloPPI({

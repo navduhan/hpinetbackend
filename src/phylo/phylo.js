@@ -1,109 +1,40 @@
 const { spawn } = require('child_process');
 
 const path = require('path');
+const getphyloPPI = (genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi,pc,pe, threshold)=>{
 
-const buildCmd = (phyloConfig) => {
-  const genomePool = phyloConfig['genomePool'];
-  const hspecies = phyloConfig['hspecies'];
-  const pspecies = phyloConfig['pspecies'];
-  const host_genes = phyloConfig['host_genes'].replace(' ', '');
-  const pathogen_genes = phyloConfig['pathogen_genes'].replace(' ', '');
-  const hi = phyloConfig['hi'];
-  const hc = phyloConfig['hc'];
-  const he = phyloConfig['he'];
-  const pi = phyloConfig['pi'];
-  const pc = phyloConfig['pc'];
-  const pe = phyloConfig['pe'];
-  const threshold = phyloConfig['threshold'];
+const host_genes2 = host_genes.replace(" ",'')
+const pathogen_genes2 = pathogen_genes.replace(" ","")
+console.log(host_genes2)
+let output;
+let getS;
+console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
 
-  console.log(`python3 / home / dock_user / web / hpinetdb / hpinetbackend / src / phylo / phylopred.py--gp ${genomePool} --h ${hspecies} --p ${pspecies} --hg ${host_genes} --pg ${pathogen_genes} --hi ${hi} --hc ${hc} --he ${he} --pi ${pi} --pc ${pc} --pe ${pe} --t ${threshold}`)
-  
-  const cmdMap = {
-    'gp': genomePool,
-    'h': hspecies,
-    'p': pspecies,
-    'hg': host_genes,
-    'pg': pathogen_genes,
-    'hi': hi,
-    'hc': hc,
-    'he': he,
-    'pi': pi,
-    'pc': pc,
-    'pe': pe,
-    't': threshold,
-  }
+    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
 
-  let cmd = ['/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py']
-  for (let [key, val] of Object.entries(cmdMap)) {
-    cmd.push(`--${key}`);
-    cmd.push(val);
-  }
+getS.stdout.on('data', (data) => {
 
-  return cmd;
+    output = data.toString();
+
+    console.log('output was generated: ' + output);
+});
+
+getS.stdin.setEncoding = 'utf-8';
+
+getS.stderr.on('data', (data) => {
+    
+    console.log('error:' + data);
+});
+return new Promise((res, rej) => {
+
+    getS.stdout.on('end', async function (code) {
+
+    const rid = output
+    console.log(rid)
+    res(rid)
+    })
+ });
+
 }
 
-// genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi, pc, pe, threshold
-const getphyloPPI = async (phyloConfig) => {
-  const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', buildCmd(phyloConfig), { shell: true });
-
-  console.log("executed script");
-
-  // Use a promise to handle the output of the spawned process
-  const outputPromise = new Promise((resolve, reject) => {
-    getS.stdout.on('data', (data) => {
-      resolve(data.toString());
-    });
-
-    getS.stderr.on('data', (data) => {
-      reject(new Error(data));
-    });
-
-    getS.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error('phylopred.py exited with code ' + code));
-      }
-    });
-  });
-
-  // Wait for the output of the spawned process and return it
-  const output = await outputPromise;
-  console.log(output)
-  // Return the output rid
-  return output;
-};
-
-
-
-
-
-const getphyloPPI2 = (phyloConfig) => {
-    const getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', buildCmd(phyloConfig), { shell: true });
-  
-    console.log("executed script");
-    let data = '';
-  
-    // Use event handlers to handle the output of the spawned process
-    getS.stdout.on('data', (chunk) => {
-      data += chunk.toString();
-    });
-  
-    getS.stderr.on('data', (data) => {
-      throw new Error(data);
-    });
-  
-    // Return a promise that resolves when the process is finished
-    return new Promise((resolve, reject) => {
-      getS.on('close', (code) => {
-        if (code !== 0) {
-          reject(new Error('phylopred.py exited with code ' + code));
-        } else {
-          resolve(data);
-        }
-      });
-    }).then((output) => {
-      console.log(output);
-      return output;
-    });
-  };
-
-  module.exports = getphyloPPI2;
+module.exports = getphyloPPI
