@@ -5,7 +5,7 @@ const getphyloPPI = (genomePool, hspecies, pspecies, host_genes, pathogen_genes,
 
 // const host_genes2 = host_genes.replace(" ",'')
 // const pathogen_genes2 = pathogen_genes.replace(" ","")
-console.log(host_genes2)
+// console.log(host_genes2)
 let output;
 let getS;
 console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
