@@ -76,28 +76,17 @@ router.route('/goppi').post(async (req, res) => {
 });
 
 router.route('/phyloppi').post(async (req, res) => {
-  // req.setTimeout(5*60*1000)
+  req.setTimeout(5*60*1000)
   const body = JSON.parse(JSON.stringify(req.body));
 
-  let results = await getphyloPPI({
-    'genomePool': body.method, 
-    'hspecies': body.hspecies, 
-    'pspecies': body.pspecies, 
-    'host_genes': body.host_genes, 
-    'pathogen_genes': body.pathogen_genes, 
-    'hi': body.hi, 
-    'hc': body.hc, 
-    'he': body.he, 
-    'pi': body.pi, 
-    'pc': body.pc, 
-    'pe': body.pe, 
-    'threshold': body.threshold
-  });
-  console.log(results)
+    let results = await getphyloPPI(body.method, body.hspecies, body.pspecies, body.host_genes, body.pathogen_genes, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.threshold)
+    
+    res.json(results)
+  
+  // console.log(results)
   res.json(results)
   console.log("sent results")
  
-
 });
 
 router.route('/results/').get(async (req, res) => {
