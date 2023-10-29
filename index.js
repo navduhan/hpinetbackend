@@ -25,4 +25,4 @@ app.use("/api", routes)
 
 const server = app.listen(apiPort, ()=> console.log(`Server runnning on port ${apiPort}`))
 
-server.setTimeout(50000);
+server.setTimeout(5000000);
