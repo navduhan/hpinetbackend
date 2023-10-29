@@ -76,16 +76,14 @@ router.route('/goppi').post(async (req, res) => {
 });
 
 router.route('/phyloppi').post(async (req, res) => {
-  // req.setTimeout(5*60*1000)
+  req.setTimeout(5*60*1000)
   const body = JSON.parse(JSON.stringify(req.body));
 try{
     let results = await getphyloPPI(body.method, body.hspecies, body.pspecies, body.host_genes, body.pathogen_genes, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.threshold)
     
     res.json(results)
-  
-  // console.log(results)
-  res.json(results)
-  console.log("sent results")
+
+    console.log("sent results")
 }
 catch (error) {
   console.error("Error:", error);
