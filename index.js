@@ -23,4 +23,6 @@ connectDB.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use("/api", routes)
 
-app.listen(apiPort, ()=> console.log(`Server runnning on port ${apiPort}`))
+const server = app.listen(apiPort, ()=> console.log(`Server runnning on port ${apiPort}`))
+
+server.setTimeout(50000);
