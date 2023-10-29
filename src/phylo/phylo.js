@@ -3,14 +3,14 @@ const { spawn } = require('child_process');
 const path = require('path');
 const getphyloPPI = (genomePool, hspecies, pspecies, host_genes, pathogen_genes, hi, hc, he, pi,pc,pe, threshold)=>{
 
-const host_genes2 = host_genes.replace(" ",'')
-const pathogen_genes2 = pathogen_genes.replace(" ","")
+// const host_genes2 = host_genes.replace(" ",'')
+// const pathogen_genes2 = pathogen_genes.replace(" ","")
 console.log(host_genes2)
 let output;
 let getS;
-console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
+console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
 
-    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes2, "--pg", pathogen_genes2, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
+    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
 
 getS.stdout.on('data', (data) => {
 
