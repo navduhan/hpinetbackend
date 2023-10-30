@@ -5,12 +5,12 @@ const getphyloPPI = (genomePool, hspecies, pspecies, host_genes, pathogen_genes,
 
 // const host_genes2 = host_genes.replace(" ",'')
 // const pathogen_genes2 = pathogen_genes.replace(" ","")
-// console.log(host_genes2)
+
 let output;
 let getS;
 console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
 
-    getS = spawn('python3', ["/home/naveen/Documents/web/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
+    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
 
 getS.stdout.on('data', (data) => {
 
@@ -29,7 +29,7 @@ return new Promise((res, rej) => {
 
     getS.stdout.on('end', async function (code) {
 
-    const rid = output.replace(/\n$/, "");
+    const rid = output
     console.log(rid)
     res(rid)
     })
