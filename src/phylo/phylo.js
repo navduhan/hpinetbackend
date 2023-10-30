@@ -29,7 +29,7 @@ return new Promise((res, rej) => {
 
     getS.stdout.on('end', async function (code) {
 
-    const rid = output
+    const rid = output.replace(/\n$/, "");
     console.log(rid)
     res(rid)
     })

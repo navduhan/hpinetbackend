@@ -65,7 +65,7 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
   return new Promise((resolve, reject) => {
     getS.stdout.on('end', async function (code) {
 
-        const resultData = output;
+        const resultData = output.replace(/\n$/, "");;
             
             resolve(resultData);
     });
