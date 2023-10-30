@@ -13,8 +13,8 @@
 
 /src/ppidb.db
 
-/src/phylo/dbs
-/src/phylo/data
+src/phylo/dbs
+src/phylo/data
 
 # misc
 .DS_Store

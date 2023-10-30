@@ -10,7 +10,7 @@ let output;
 let getS;
 console.log("/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe )
 
-    getS = spawn('/opt/miniconda3/envs/ml-gpu/bin/python3', ["/home/dock_user/web/hpinetdb/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
+    getS = spawn('python3', ["/home/naveen/Documents/web/hpinetbackend/src/phylo/phylopred.py","--gp", genomePool,"--h", hspecies, "--p", pspecies, "--hg", host_genes, "--pg", pathogen_genes, "--hi", hi, "--hc", hc, "--he", he, "--pi", pi, "--pc", pc, "--pe", pe, "--t", threshold]);
 
 getS.stdout.on('data', (data) => {
 
@@ -29,7 +29,7 @@ return new Promise((res, rej) => {
 
     getS.stdout.on('end', async function (code) {
 
-    const rid = output
+    const rid = output.replace(/\n$/, "");
     console.log(rid)
     res(rid)
     })
