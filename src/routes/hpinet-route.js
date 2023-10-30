@@ -135,16 +135,16 @@ router.route('/annotation/').get(async(req,res) =>{
 
 let {host, pathogen, hid, pid} =req.query
 
-let hgo_results = await GO['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let pgo_results = await GO['pathogen'].find({ 'species': { '$in': pathogen.toLowerCase() }, 'gene':{'$in':pid} })
-let hkegg_results = await KEGG['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let pkegg_results = await KEGG['pathogen'].find({ 'species': { '$in': pathogen.toLowerCase() }, 'gene':{'$in':pid} })
-let hlocal_results = await Local['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let plocal_results = await Local['pathogen'].find({ 'species': { '$in': pathogen.toLowerCase() }, 'gene':{'$in':pid} })
-let hinterpro_results = await Interpro['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let pinterpro_results = await Interpro['pathogen'].find({ 'species': { '$in': pathogen.toLowerCase() }, 'gene':{'$in':pid} })
-let htf_results = await TF['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let effector_results = await Effector['pathogen'].find({ 'gene':{'$in':pid}  })
+let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let pgo_results = await GO['pathogen'].find({'species': host.toLowerCase() , 'gene':pid})
+let hkegg_results = await KEGG['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let pkegg_results = await KEGG['pathogen'].find({'species': host.toLowerCase() , 'gene':pid})
+let hlocal_results = await Local['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let plocal_results = await Local['pathogen'].find({'species': host.toLowerCase() , 'gene':pid})
+let hinterpro_results = await Interpro['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let pinterpro_results = await Interpro['pathogen'].find({'species': host.toLowerCase() , 'gene':pid})
+let htf_results = await TF['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let effector_results = await Effector['pathogen'].find({ 'gene': pid})
 
 res.json({
 'hgo': hgo_results, 
