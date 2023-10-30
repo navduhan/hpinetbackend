@@ -6,6 +6,7 @@ const EffectorSchema = new mongoose.Schema({
     'length': {type:Number},
     'description':{type:String},
     'type':{type:String},
+    'species':{type:String},
     
 });
 

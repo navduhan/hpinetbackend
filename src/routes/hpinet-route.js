@@ -144,7 +144,7 @@ let plocal_results = await Local['pathogen'].find({ 'species': { '$in': pathogen
 let hinterpro_results = await Interpro['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
 let pinterpro_results = await Interpro['pathogen'].find({ 'species': { '$in': pathogen.toLowerCase() }, 'gene':{'$in':pid} })
 let htf_results = await TF['host'].find({ 'species': { '$in': host.toLowerCase() }, 'gene':{'$in':hid} })
-let effector_results = await Effector['pathogen'].find({ 'type': { '$in': species }, 'gene':{'$in':pid}  })
+let effector_results = await Effector['pathogen'].find({ 'gene':{'$in':pid}  })
 
 res.json({
 'hgo': hgo_results, 
