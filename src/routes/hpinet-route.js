@@ -136,14 +136,14 @@ router.route('/annotation/').get(async(req,res) =>{
 let {host, pathogen, hid, pid} =req.query
 
 let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
-let pgo_results = await GO['pathogen'].find({'species': pathogen.toLowerCase() , 'gene':pid})
-let hkegg_results = await KEGG['host'].find({'species': host.toLowerCase() , 'gene':hid.split(".")[0]})
-let pkegg_results = await KEGG['pathogen'].find({'species': pathogen.toLowerCase() , 'gene':pid})
+let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
+let hkegg_results = await KEGG['host'].find({'species': host , 'gene':hid})
+let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
 let hlocal_results = await Local['host'].find({'species': host , 'gene':hid})
-let plocal_results = await Local['pathogen'].find({'species': pathogen.toLowerCase() , 'gene':pid})
-let hinterpro_results = await Interpro['host'].find({'species': host , 'gene':hid.split(".")[0]})
-let pinterpro_results = await Interpro['pathogen'].find({'species': pathogen.toLowerCase() , 'gene':pid})
-let htf_results = await TF['host'].find({'species': host, 'gene':hid.split(".")[0]})
+let plocal_results = await Local['pathogen'].find({'species': pathogen, 'gene':pid})
+let hinterpro_results = await Interpro['host'].find({'species': host , 'gene':hid})
+let pinterpro_results = await Interpro['pathogen'].find({'species': pathogen , 'gene':pid})
+let htf_results = await TF['host'].find({'species': host, 'gene':hid})
 let effector_results = await Effector['pathogen'].find({ 'gene': pid})
 
 res.json({
