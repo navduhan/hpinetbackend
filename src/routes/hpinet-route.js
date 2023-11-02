@@ -54,7 +54,13 @@ const DomainSchema = new mongoose.Schema({
   intdb: { type: String },
 });
 
-
+function splithost(string) {
+  if (string.includes('cds') || string.includes('CDS')) {
+    return string.rsplit('.', 2);
+  } else {
+    return string.rsplit('.', 1);
+  }
+}
 router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
@@ -136,21 +142,9 @@ router.route('/annotation/').get(async(req,res) =>{
 console.log(req.query)
 
 let {host, pathogen, hid, pid} =req.query
-const parts = hid.split('.');
-let rhid;
-// Check if "cds" or "CDS" is present in the string (case-insensitive)
-if (parts.some(part => /cds/i.test(part))) {
-  // Split on the second last period (.)
-  const lastIndex = hid.lastIndexOf('.');
-  const secondLastIndex = hid.lastIndexOf('.', lastIndex - 1);
-  rhid = hid.substring(0, secondLastIndex) + hid.substring(secondLastIndex).split('.').slice(-2).join('.');
-  console.log(rhid);
-} else {
-  // Split on the last period (.)
-  rhid = parts[0]
-  console.log(rhid);
-}
 
+const rhid = splithost(hid)
+console.log(rhid)
 let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
 let hkegg_results = await KEGG['host'].find({'species': host, 'gene':rhid})
