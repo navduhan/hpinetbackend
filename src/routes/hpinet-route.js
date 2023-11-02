@@ -151,7 +151,7 @@ if (parts.some(part => /cds/i.test(part))) {
   console.log(rhid);
 }
 
-let hgo_results = await GO['host'].find({'species': host , 'gene':hid})
+let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
 let hkegg_results = await KEGG['host'].find({'species': host, 'gene':rhid})
 let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
