@@ -149,14 +149,15 @@ console.log(req.query)
 let {host, pathogen, hid, pid} =req.query
 
 const rhid = splithost(hid)
-console.log(rhid)
+
+
 let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
 let hkegg_results = await KEGG['host'].find({'species': host, 'gene':rhid})
 let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
 let hlocal_results = await Local['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let plocal_results = await Local['pathogen'].find({'species': pathogen, 'gene':pid})
-let hinterpro_results = await Interpro['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let hinterpro_results = await Interpro['host'].find({'species': host.toLowerCase() , 'gene':rhid})
 let pinterpro_results = await Interpro['pathogen'].find({'species': pathogen , 'gene':pid})
 let htf_results = await TF['host'].find({'species': host, 'gene':hid})
 let effector_results = await Effector['pathogen'].find({'species': pathogen, 'gene': pid})
