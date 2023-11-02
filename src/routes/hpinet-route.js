@@ -144,11 +144,11 @@ if (parts.some(part => /cds/i.test(part))) {
   const lastIndex = inputString.lastIndexOf('.');
   const secondLastIndex = inputString.lastIndexOf('.', lastIndex - 1);
   rhid = inputString.substring(0, secondLastIndex) + inputString.substring(secondLastIndex).split('.').slice(-2).join('.');
-  console.log(result);
+  console.log(rhid);
 } else {
   // Split on the last period (.)
   rhid = parts.slice(-2).join('.');
-  console.log(result);
+  console.log(rhid);
 }
 
 let hgo_results = await GO['host'].find({'species': host , 'gene':hid})
