@@ -138,16 +138,16 @@ console.log(req.query)
 let {host, pathogen, hid, pid} =req.query
 console.log(hid, pid)
 
-let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
+let hgo_results = await GO['host'].find({'species': host , 'gene':hid})
 let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
 let hkegg_results = await KEGG['host'].find({'species': host, 'gene':hid})
 let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
-let hlocal_results = await Local['host'].find({'species': host , 'gene':hid})
+let hlocal_results = await Local['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let plocal_results = await Local['pathogen'].find({'species': pathogen, 'gene':pid})
-let hinterpro_results = await Interpro['host'].find({'species': host , 'gene':hid})
+let hinterpro_results = await Interpro['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let pinterpro_results = await Interpro['pathogen'].find({'species': pathogen , 'gene':pid})
 let htf_results = await TF['host'].find({'species': host, 'gene':hid})
-let effector_results = await Effector['pathogen'].find({ 'gene': pid})
+let effector_results = await Effector['pathogen'].find({'species': pathogen, 'gene': pid})
 
 res.json({
 'hgo': hgo_results, 
@@ -401,7 +401,7 @@ router.route('/effector/').get(async (req, res) => {
   }
 
   let query = {
-    'type': species
+    'species': species
   }
   console.log(species)
   const limit = parseInt(size)
