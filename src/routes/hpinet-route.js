@@ -55,15 +55,18 @@ const DomainSchema = new mongoose.Schema({
 });
 
 function splithost(string) {
+  const cdsOrCdsRegex = /(cds|CDS)/i;
   const lastDotIndex = string.lastIndexOf('.');
-  const secondLastDotIndex = string.lastIndexOf('.', lastDotIndex - 1);
 
-  if (string.includes('cds') || string.includes('CDS')) {
+  if (cdsOrCdsRegex.test(string)) {
+    const cdsOrCdsIndex = string.search(cdsOrCdsRegex);
+    const secondLastDotIndex = string.lastIndexOf('.', cdsOrCdsIndex - 1);
     return string.slice(0, secondLastDotIndex).concat([string.slice(secondLastDotIndex + 1)]);
   } else {
     return string.slice(0, lastDotIndex).concat([string.slice(lastDotIndex + 1)]);
   }
 }
+
 router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
