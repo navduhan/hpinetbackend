@@ -141,13 +141,13 @@ let rhid;
 // Check if "cds" or "CDS" is present in the string (case-insensitive)
 if (parts.some(part => /cds/i.test(part))) {
   // Split on the second last period (.)
-  const lastIndex = inputString.lastIndexOf('.');
-  const secondLastIndex = inputString.lastIndexOf('.', lastIndex - 1);
-  rhid = inputString.substring(0, secondLastIndex) + inputString.substring(secondLastIndex).split('.').slice(-2).join('.');
+  const lastIndex = hid.lastIndexOf('.');
+  const secondLastIndex = hid.lastIndexOf('.', lastIndex - 1);
+  rhid = hid.substring(0, secondLastIndex) + hid.substring(secondLastIndex).split('.').slice(-2).join('.');
   console.log(rhid);
 } else {
   // Split on the last period (.)
-  rhid = parts.slice(-2).join('.');
+  rhid = parts.slice(-1).join('.');
   console.log(rhid);
 }
 
