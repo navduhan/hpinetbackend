@@ -136,11 +136,24 @@ router.route('/annotation/').get(async(req,res) =>{
 console.log(req.query)
 
 let {host, pathogen, hid, pid} =req.query
-console.log(hid, pid)
+const parts = hid.split('.');
+let rhid;
+// Check if "cds" or "CDS" is present in the string (case-insensitive)
+if (parts.some(part => /cds/i.test(part))) {
+  // Split on the second last period (.)
+  const lastIndex = inputString.lastIndexOf('.');
+  const secondLastIndex = inputString.lastIndexOf('.', lastIndex - 1);
+  rhid = inputString.substring(0, secondLastIndex) + inputString.substring(secondLastIndex).split('.').slice(-2).join('.');
+  console.log(result);
+} else {
+  // Split on the last period (.)
+  rhid = parts.slice(-2).join('.');
+  console.log(result);
+}
 
 let hgo_results = await GO['host'].find({'species': host , 'gene':hid})
 let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
-let hkegg_results = await KEGG['host'].find({'species': host, 'gene':hid})
+let hkegg_results = await KEGG['host'].find({'species': host, 'gene':rhid})
 let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
 let hlocal_results = await Local['host'].find({'species': host.toLowerCase() , 'gene':hid})
 let plocal_results = await Local['pathogen'].find({'species': pathogen, 'gene':pid})
