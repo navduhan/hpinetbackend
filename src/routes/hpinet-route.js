@@ -147,7 +147,7 @@ if (parts.some(part => /cds/i.test(part))) {
   console.log(rhid);
 } else {
   // Split on the last period (.)
-  rhid = parts.slice(-2).join('.');
+  rhid = parts[0]
   console.log(rhid);
 }
 
