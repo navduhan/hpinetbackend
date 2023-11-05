@@ -7,10 +7,10 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
 
   // Build the command arguments for the script
   const commandArgs = [
-    // "/opt/miniconda3/envs/ml-gpu/bin/python3",
-    "python3",
-    // "/home/dock_user/web/hpinetdb/hpinetbackend/src/introlog/hpinterolog.py",
-    "/home/naveen/Desktop/hpinet/hpinetbackend/src/introlog/hpinterolog.py",
+    "/opt/miniconda3/envs/ml-gpu/bin/python3",
+    // "python3",
+    "/home/dock_user/web/hpinetdb/hpinetbackend/src/introlog/hpinterolog.py",
+    // "/home/naveen/Desktop/hpinet/hpinetbackend/src/introlog/hpinterolog.py",
     "--method", method,
     "--blastdb", "/home/dock_user/hpinetblast.db",
     "--ppidb", "ppidb",
