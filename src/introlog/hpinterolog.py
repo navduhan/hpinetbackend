@@ -4,6 +4,7 @@ import sqlite3
 from sqlite3 import Error
 import argparse
 import time
+import os
 
 
 ver= '0.0.1'
@@ -29,7 +30,7 @@ parser.add_argument("--pathogen_identity", dest='pi',type=int, help="Pathogen id
 parser.add_argument("--pathogen_coverage", dest='pc',type=int, help="Pathogen coverage for blast filter")
 parser.add_argument("--pathogen_evalue", dest='pe', type=float, help="Pathogen evalue for blast filter")
 parser.add_argument('--id', dest='idt', type=str, help="Id type [host, pathogen]" )
-parser.add_argument('--genes', dest='genes', type=str, help="Genes ids to search")
+parser.add_argument('--genes', action="store_true", default=False, help="Genes ids to search")
 parser.add_argument('--domdb',dest='domdb', type =str)
 parser.add_argument('--ppitables', dest='ppitables', type=str, default='all', 
     help="""Provide space separated interaction database names. For example hpidb mint 
@@ -202,19 +203,16 @@ def main():
     results_list ={}
    
     intTables = options.ppitables.replace(' ','').split(",")
-
-    
+    if options.genes:
+        genes = open(os.path.join(os.getcwd(), "src/genes.txt")).readlines()[0]
     
     hproteins = None
     pproteins = None
     
     if options.idt == 'host':
-        if options.genes:
-            hproteins = options.genes.replace(' ','').split(",")
-        
+            hproteins = genes.replace(' ','').split(",")
     if options.idt == 'pathogen':
-        if options.genes:
-            pproteins = options.genes.replace(' ','').split(",")
+            pproteins = genes.replace(' ','').split(",")
     
     if options.method == 'interolog':
         for hpd in intTables:
@@ -273,9 +271,12 @@ def main():
             rid = add_results(con_final.to_dict('records'))
 
             print(rid)
+            os.remove(os.path.join(os.getcwd(), "src/genes.txt"))
         except Exception:
             rid = add_noresults("no results")
             print(rid)
+
+        
 
 if __name__ == '__main__':
     main()

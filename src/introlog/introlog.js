@@ -2,13 +2,15 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Function to run the hpinterolog.py script
-const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi, pc, pe, intdb, domdb, genes, idt) => {
+const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi, pc, pe, intdb, domdb,isgenes, idt) => {
   let output;
 
   // Build the command arguments for the script
   const commandArgs = [
     "/opt/miniconda3/envs/ml-gpu/bin/python3",
+    // "python3",
     "/home/dock_user/web/hpinetdb/hpinetbackend/src/introlog/hpinterolog.py",
+    // "/home/naveen/Desktop/hpinet/hpinetbackend/src/introlog/hpinterolog.py",
     "--method", method,
     "--blastdb", "/home/dock_user/hpinetblast.db",
     "--ppidb", "ppidb",
@@ -22,13 +24,14 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
     "--pathogen_evalue", parseFloat(pe),
     "--ppitables", intdb,
     '--domdb', domdb,
-    '--id', idt
+    '--id', idt,
+    "--genes",  isgenes
   ];
 
-  if (genes.length > 0) {
-    commandArgs.push('--genes', genes);
-  }
 
+  // if (genes.length > 0) {
+  //   commandArgs.push('--genes', genes);
+  // }
   const getS = spawn(commandArgs[0], commandArgs.slice(1));
 
   // Handle stdout data

@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 const getPPI = require("../introlog/introlog");
 const GO = require("../models/GO");
@@ -69,7 +71,14 @@ function splithost(string) {
 router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
-  console.log(body)
+  let isgenes;
+  if (body.genes.length !==0 | body.keyword ){
+     isgenes=True
+  }
+  else{
+     isgenes =False
+  }
+  
   let genes;
 
   if (body.searchType ==='keyword'){
@@ -103,11 +112,23 @@ router.route('/ppi').post(async (req, res) => {
   }
   else{
     genes =body.genes
+    
   }
 
-  // console.log(genes)
 
-  let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, genes, body.ids)
+
+  const filePath = path.join(__dirname,`../genes.txt`);
+
+  
+  fs.writeFile(filePath, genes, (err) => {
+    if (err) {
+      console.error('Error writing to the file:', err);
+    } else {
+      console.log(`Text has been written to ${filePath}`);
+    }
+  });
+
+  let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, isgenes, body.ids)
   
   res.json(results)
 
