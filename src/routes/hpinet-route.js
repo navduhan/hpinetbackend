@@ -73,12 +73,7 @@ router.route('/ppi').post(async (req, res) => {
   const body = JSON.parse(JSON.stringify(req.body));
   console.log(body)
   let isgenes;
-  if (body.genes.length !==0 | body.keyword ){
-     isgenes= "True"
-  }
-  else{
-     isgenes = "False"
-  }
+  
   
   let genes;
   let species;
@@ -120,6 +115,13 @@ router.route('/ppi').post(async (req, res) => {
     genes =body.genes
     
   }
+
+  if (genes.length !==0 | body.keyword ){
+    isgenes= "True"
+ }
+ else{
+    isgenes = "False"
+ }
 
   
 
