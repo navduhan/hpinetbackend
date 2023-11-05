@@ -203,6 +203,7 @@ def main():
     results_list ={}
    
     intTables = options.ppitables.replace(' ','').split(",")
+    print(options.genes)
     if options.genes:
         genes = open(os.path.join(os.getcwd(), "src/genes.txt")).readlines()[0]
     

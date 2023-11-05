@@ -90,6 +90,7 @@ router.route('/ppi').post(async (req, res) => {
     else{
       species = body.pathogen.toLowerCase()
     }
+    console.log(species)
     if (body.anotType === 'go'){
       const query = {
         $or: [
@@ -108,6 +109,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await GO[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -118,7 +120,7 @@ router.route('/ppi').post(async (req, res) => {
     
   }
 
-  console.log(genes.length)
+  
 
 
   const filePath = path.join(__dirname,`../genes.txt`);
