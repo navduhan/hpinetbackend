@@ -126,7 +126,7 @@ router.route('/ppi').post(async (req, res) => {
     } 
   });
 
-  let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, isgenes, body.ids)
+  let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, isgenes, species)
   
   res.json(results)
 

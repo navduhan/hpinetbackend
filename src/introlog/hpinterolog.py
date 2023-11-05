@@ -210,8 +210,10 @@ def main():
     pproteins = None
     
     if options.idt == 'host':
+        if options.genes:
             hproteins = genes.replace(' ','').split(",")
     if options.idt == 'pathogen':
+        if options.genes:
             pproteins = genes.replace(' ','').split(",")
     
     if options.method == 'interolog':
