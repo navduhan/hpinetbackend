@@ -88,9 +88,10 @@ router.route('/ppi').post(async (req, res) => {
         'species':body.host.toLowerCase()
       }
 
-      genes = await GO['host'].find(query)
-
+      keyword_data = await GO[body.ids].find(query)
       
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray)
     }
   }
   else{
