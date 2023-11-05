@@ -109,13 +109,16 @@ router.route('/ppi').post(async (req, res) => {
       
       const geneArray = keyword_data.map(obj => obj.gene);
       genes = geneArray.join(',');
+      
     }
   }
   else{
+
     genes =body.genes
     
   }
 
+  console.log(genes.length)
 
 
   const filePath = path.join(__dirname,`../genes.txt`);
