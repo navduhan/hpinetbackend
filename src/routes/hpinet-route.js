@@ -73,7 +73,7 @@ router.route('/ppi').post(async (req, res) => {
   let genes;
 
   if (body.searchType ==='keyword'){
-    if (body.anoType === 'go'){
+    if (body.anotType === 'go'){
       const query = {
         $or: [
           
