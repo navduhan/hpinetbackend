@@ -109,6 +109,103 @@ router.route('/ppi').post(async (req, res) => {
       genes = geneArray.join(',');
       
     }
+    if (body.anotType === 'local'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "location": { $regex: body.keyword} },
+          
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'pathway'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "pathway": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} }
+          
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'tf'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "tf_family": { $regex: body.keyword} }
+        
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'interpro'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "length": { $regex: body.keyword} },
+          { "interpro_id": { $regex: body.keyword} },
+          { "sourcedb": { $regex: body.keyword} },
+          { "domain": { $regex: body.keyword} },
+          { "domain_description": { $regex: body.keyword} }
+        
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'virulence'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} },
+          { "type": { $regex: body.keyword} },
+        
+        
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
   }
   else{
 
@@ -122,8 +219,6 @@ router.route('/ppi').post(async (req, res) => {
  else{
     isgenes = "False"
  }
-
-  
 
 
   const filePath = path.join(__dirname,`../genes.txt`);
@@ -294,14 +389,152 @@ router.route('/domain_results/').post(async (req, res) => {
     const skip = (page - 1) * size;
     const resultsdb = mongoose.connection.useDb("hpinetdb");
     const Results = resultsdb.model(table, DomainSchema);
+    let isgenes;
+  
+  
+  let genes;
+  let species;
+
+  if (body.searchType ==='keyword'){
     
+    if (body.ids ==='host'){
+      species = body.host.toLowerCase()
+    }
+    else{
+      species = body.pathogen.toLowerCase()
+    }
+    console.log(species)
+    if (body.anotType === 'go'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "term": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} },
+          { "definition": { $regex: body.keyword } },
+          { "evidence": { $regex: body.keyword} },
+          { "ontology": { $regex: body.keyword } },
+          
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'local'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "location": { $regex: body.keyword} },
+          
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'pathway'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "pathway": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} }
+          
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'tf'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "tf_family": { $regex: body.keyword} }
+        
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'interpro'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "length": { $regex: body.keyword} },
+          { "interpro_id": { $regex: body.keyword} },
+          { "sourcedb": { $regex: body.keyword} },
+          { "domain": { $regex: body.keyword} },
+          { "domain_description": { $regex: body.keyword} }
+        
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+    if (body.anotType === 'virulence'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} },
+          { "type": { $regex: body.keyword} },
+        ],
+        'species':species
+      }
+
+      keyword_data = await GO[body.ids].find(query)
+      
+      const geneArray = keyword_data.map(obj => obj.gene);
+      console.log(geneArray.length)
+      genes = geneArray.join(',');
+      
+    }
+  }
+  else{
+
+    genes =body.genes
+    
+  }
+
     const query = { intdb: { $in: body.intdb } };
 
-    if (body.genes &&  body.genes.length > 0) {
+    if (genes.length !==0 | body.keyword ) {
       if (body.idt === 'host') {
-        query.Host_Protein = { $in: body.genes };
+        query.Host_Protein = { $in: genes };
       } else if (body.idt === 'pathogen') {
-        query.Pathogen_Protein = { $in: body.genes};
+        query.Pathogen_Protein = { $in: genes};
       }
     }
    console.log(query)
@@ -324,8 +557,6 @@ router.route('/domain_results/').post(async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-
-
 
 
 router.route('/network/').get(async (req, res) => {
