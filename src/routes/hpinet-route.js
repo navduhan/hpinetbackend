@@ -70,8 +70,31 @@ router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
   console.log(body)
+  let genes;
+
   if (body.searchType ==='keyword'){
-    console.log(body.keyword)
+    if (body.anoType === 'go'){
+      const query = {
+        $or: [
+          
+          { "gene": { $regex: body.keyword} },
+          { "term": { $regex: body.keyword} },
+          { "description": { $regex: body.keyword} },
+          { "definition": { $regex: body.keyword } },
+          { "evidence": { $regex: body.keyword} },
+          { "ontology": { $regex: body.keyword } },
+          
+        ],
+        'species':body.host.toLowerCase()
+      }
+
+      let results = await GO['host'].find(query)
+
+      console.log(results)
+    }
+  }
+  else{
+    genes =body.genes
   }
 
   let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, body.genes, body.ids)
