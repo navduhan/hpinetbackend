@@ -73,6 +73,13 @@ router.route('/ppi').post(async (req, res) => {
   let genes;
 
   if (body.searchType ==='keyword'){
+    let species;
+    if (body.ids ==='host'){
+      species = body.host.toLowerCase()
+    }
+    else{
+      species = body.pathogen.toLowerCase()
+    }
     if (body.anotType === 'go'){
       const query = {
         $or: [
@@ -85,7 +92,7 @@ router.route('/ppi').post(async (req, res) => {
           { "ontology": { $regex: body.keyword } },
           
         ],
-        'species':body.host.toLowerCase()
+        'species':species
       }
 
       keyword_data = await GO[body.ids].find(query)
@@ -98,7 +105,7 @@ router.route('/ppi').post(async (req, res) => {
     genes =body.genes
   }
 
-  console.log(genes)
+  // console.log(genes)
 
   let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, genes, body.ids)
   
