@@ -80,9 +80,10 @@ router.route('/ppi').post(async (req, res) => {
   }
   
   let genes;
+  let species;
 
   if (body.searchType ==='keyword'){
-    let species;
+    
     if (body.ids ==='host'){
       species = body.host.toLowerCase()
     }
