@@ -70,7 +70,7 @@ router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
   console.log(body)
-  if (body.searchTyep ==='keyword'){
+  if (body.searchType ==='keyword'){
     console.log(body.keyword)
   }
 
