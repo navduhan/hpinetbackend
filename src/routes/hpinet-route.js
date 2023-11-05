@@ -71,6 +71,7 @@ function splithost(string) {
 router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
+  console.log(body)
   let isgenes;
   if (body.genes.length !==0 | body.keyword ){
      isgenes= "True"
