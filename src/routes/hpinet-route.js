@@ -91,7 +91,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await GO[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray)
+      genes = geneArray.join(',');
     }
   }
   else{
