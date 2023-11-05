@@ -88,14 +88,16 @@ router.route('/ppi').post(async (req, res) => {
         'species':body.host.toLowerCase()
       }
 
-      let results = await GO['host'].find(query)
+      genes = await GO['host'].find(query)
 
-      console.log(results)
+      
     }
   }
   else{
     genes =body.genes
   }
+
+  console.log(genes)
 
   let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, body.genes, body.ids)
   
