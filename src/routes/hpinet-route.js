@@ -73,10 +73,10 @@ router.route('/ppi').post(async (req, res) => {
   const body = JSON.parse(JSON.stringify(req.body));
   let isgenes;
   if (body.genes.length !==0 | body.keyword ){
-     isgenes=True
+     isgenes= "True"
   }
   else{
-     isgenes =False
+     isgenes = "False"
   }
   
   let genes;
