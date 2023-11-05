@@ -123,9 +123,7 @@ router.route('/ppi').post(async (req, res) => {
   fs.writeFile(filePath, genes, (err) => {
     if (err) {
       console.error('Error writing to the file:', err);
-    } else {
-      console.log(`Text has been written to ${filePath}`);
-    }
+    } 
   });
 
   let results = await getPPI(body.category, body.hspecies, body.pspecies, body.hi, body.hc, body.he, body.pi, body.pc, body.pe, body.intdb, body.domdb, isgenes, body.ids)
