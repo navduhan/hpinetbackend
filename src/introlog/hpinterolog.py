@@ -264,7 +264,7 @@ def main():
     if options.method == 'consensus':
         hspecies = options.hosttable.split("_")[1]
         pspecies = options.pathogentable.split("_")[1]
-        table = f"{hspecies.tolower()}_{pspecies}_domains"
+        table = f"{hspecies.lower()}_{pspecies}_domains"
         if hproteins == None and pproteins == None:
             domain_result = filter_domain(table)
         
