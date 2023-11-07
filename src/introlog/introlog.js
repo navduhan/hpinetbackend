@@ -27,10 +27,13 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
     '--id', idt,
     
   ];
+  
 
   if (isgenes ==='True') {
     commandArgs.push('--genes');
   }
+
+  console.log(commandArgs)
   const getS = spawn(commandArgs[0], commandArgs.slice(1));
 
   // Handle stdout data
