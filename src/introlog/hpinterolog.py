@@ -277,9 +277,10 @@ def main():
             domain_result = filter_domain( table, idt = options.idt, genes=pproteins)
 
         for hpd in intTables:
-
-            host_blast = filter_blast(options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
-            pathogen_blast = filter_blast(options.pathogentable,options.pi,options.pc,options.pe,hpd, genes=pproteins)
+            host_blast = filter_blast(options.blastdb,options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
+            # host_blast = filter_blast(options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
+            pathogen_blast = filter_blast(options.blastdb,options.pathogentable,options.pi,options.pc,options.pe,hpd, genes=pproteins)
+            # pathogen_blast = filter_blast(options.pathogentable,options.pi,options.pc,options.pe,hpd, genes=pproteins)
             hd =hpd+'s'
         
             if  isinstance(pathogen_blast, pd.DataFrame) and isinstance(host_blast, pd.DataFrame):
