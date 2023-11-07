@@ -33,7 +33,7 @@ const getPPI = async (method, hspecies, pspecies, identity, coverage, evalue, pi
     commandArgs.push('--genes');
   }
 
-  console.log(commandArgs)
+  console.log(commandArgs.join(" "))
   const getS = spawn(commandArgs[0], commandArgs.slice(1));
 
   // Handle stdout data
