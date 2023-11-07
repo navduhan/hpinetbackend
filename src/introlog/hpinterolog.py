@@ -289,7 +289,7 @@ def main():
                 results_list[hpd]=results
             
             
-        try:
+        # try:
             final = pd.concat(results_list.values(),ignore_index=True)
             con_final = consensus(interolog=final, domain=domain_result)
             con_final.reset_index(inplace=True, drop=True)
@@ -297,9 +297,9 @@ def main():
 
             print(rid)
             os.remove(os.path.join(os.getcwd(), "src/genes.txt"))
-        except Exception:
-            rid = add_noresults("no results")
-            print(rid)
+        # except Exception:
+        #     rid = add_noresults("no results")
+        #     print(rid)
 
         
 
