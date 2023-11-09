@@ -145,8 +145,8 @@ def ppi(intdb, pathogendf, hostdf):
 
     return final_results
 
-def filter_domain_old( table, idt =None, genes=None):
-    mydb = create_connection("wheatblast.db")
+def filter_domain( table, idt =None, genes=None):
+    mydb = create_connection("/home/dock_user/hpinet_domain.db")
  
 
     if genes !=None:
@@ -174,25 +174,6 @@ def filter_domain_old( table, idt =None, genes=None):
     
     return df
 
-def filter_domain(table, idt=None, genes=None):
-
-    db = connection("hpinetdb")
-
-    collection = db.get_collection(table)
-
-    query = {}
-
-    if genes is not None:
-        if idt == 'host':
-            query["Host_Protein"] = {"$in": genes}
-        elif idt == 'pathogen':
-            query["Pathogen_Protein"] = {"$in": genes}
-
-    cursor = collection.find(query)
-
-    df = pd.DataFrame(cursor)
-
-    return df
 
 def consensus(interolog, domain):
 
