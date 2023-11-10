@@ -177,7 +177,7 @@ def filter_domain( table, idt =None, genes=None):
 
 def consensus(interolog, domain):
 
-    final = interolog.merge(domain, on=['Host_protein', 'Pathogen_Protein'])
+    final = interolog.merge(domain, on=['Host_Protein', 'Pathogen_Protein'])
 
     return final
 
