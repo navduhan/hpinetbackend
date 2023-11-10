@@ -145,7 +145,7 @@ def ppi(intdb, pathogendf, hostdf):
 
     return final_results
 
-def filter_domain( table, idt =None, genes=None):
+def filter_domain( table, idt =None, genes=None, domdb=None):
     mydb = create_connection("/home/dock_user/hpinet_domain.db")
  
 
@@ -161,10 +161,10 @@ def filter_domain( table, idt =None, genes=None):
 
         if idt !=None:
             if  idt =='host':
-                query = "SELECT * FROM {} WHERE Host_Protein IN {};".format(table,ht)
+                query = "SELECT * FROM {} WHERE Host_Protein IN {} AND intdb IN {};".format(table,ht, domdb)
                 results = mydb.execute(query).fetchall()
             if  idt =='pathogen':
-                query = "SELECT * FROM {} WHERE Pathogen_Protein IN {};".format(table,ht)
+                query = "SELECT * FROM {} WHERE Pathogen_Protein IN {} AND intdb IN {};".format(table,ht, domdb)
                 results = mydb.execute(query).fetchall()
     else:
         query = "SELECT * FROM {};".format(table)
@@ -204,6 +204,7 @@ def main():
     results_list ={}
    
     intTables = options.ppitables.replace(' ','').split(",")
+    domtables = options.domdb.replace(' ','').split(",")
     # print(options.genes)
     if options.genes:
         genes = open(os.path.join(os.getcwd(), "src/genes.txt")).readlines()[0]
@@ -246,16 +247,17 @@ def main():
         hspecies = options.hosttable.split("_")[1]
         pspecies = options.pathogentable.split("_")[1]
         table = f"{hspecies}_{pspecies}_domains"
+
         if hproteins == None and pproteins == None:
-            domain_result = filter_domain(table)
+            domain_result = filter_domain(table, domdb=domtables)
         
         elif hproteins !=None and pproteins==None:
 
-            domain_result = filter_domain( table, idt = options.idt, genes=hproteins)
+            domain_result = filter_domain( table, idt = options.idt, genes=hproteins,domdb=domtables)
 
         elif hproteins ==None and pproteins !=None:
 
-            domain_result = filter_domain( table, idt = options.idt, genes=pproteins)
+            domain_result = filter_domain( table, idt = options.idt, genes=pproteins,domdb=domtables)
 
         for hpd in intTables:
             host_blast = filter_blast(options.blastdb,options.hosttable,options.hi,options.hc,options.he,hpd, genes=hproteins)
