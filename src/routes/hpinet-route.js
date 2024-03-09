@@ -626,16 +626,14 @@ router.route('/domain_results/').post(async (req, res) => {
     // Create a new MongoDB collection with the timestamp-based name
     const newCollection = upresults.collection(tableName);
 
-    const finalArray = Array.isArray(final) ? final : [final];
+  //   const finalArray = Array.isArray(final) ? final : [final];
 
-    if (finalArray.some(item => typeof item !== 'object' || item === null)) {
-      throw new Error('Invalid document found in final array');
-  }
-  console.log(finalArray)
+  //   if (finalArray.some(item => typeof item !== 'object' || item === null)) {
+  //     throw new Error('Invalid document found in final array');
+  // }
+  // console.log(finalArray)
     // Insert the data into the new collection
-    await newCollection.insertMany({
-    finalArray
-    });
+    await newCollection.insertMany(final);
 
     res.json({
       results: final,
