@@ -72,8 +72,8 @@ router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
 
-  console.log(body.keyword)
-  console.log(body.anotType)
+  // console.log(body.keyword)
+  // console.log(body.anotType)
   let isgenes;
   
   let genes;
@@ -87,7 +87,7 @@ router.route('/ppi').post(async (req, res) => {
     else{
       species = body.pathogen.toLowerCase()
     }
-    console.log(species)
+    // console.log(species)
     if (body.anotType === 'go'){
       const query = {
         $or: [
@@ -106,7 +106,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await GO[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -124,7 +124,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await Local[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -143,7 +143,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await KEGG[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -156,13 +156,13 @@ router.route('/ppi').post(async (req, res) => {
           'species':{$regex: species, $options: "i"}
       };
   
-      console.log(query);
+      // console.log(query);
       keyword_data = await TF[body.ids].find(query);
   
-      console.log(keyword_data);
+      // console.log(keyword_data);
   
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length);
+      // console.log(geneArray.length);
       genes = geneArray.join(',');
   }
   
@@ -186,7 +186,7 @@ router.route('/ppi').post(async (req, res) => {
     keyword_data = await Interpro[body.ids].find(query);
 
     const geneArray = keyword_data.map(obj => obj.gene);
-    console.log(geneArray.length);
+    // console.log(geneArray.length);
     genes = geneArray.join(',');
 }
 
@@ -206,7 +206,7 @@ router.route('/ppi').post(async (req, res) => {
       keyword_data = await Effector[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -258,7 +258,7 @@ try{
     
     res.json(results)
 
-    console.log("sent results")
+    // console.log("sent results")
 }
 catch (error) {
   console.error("Error:", error);
@@ -308,7 +308,7 @@ router.route('/results/').get(async (req, res) => {
 
 router.route('/annotation/').get(async (req, res) => {
   try {
-    console.log(req.query);
+    // console.log(req.query);
 
     let { host, pathogen, hid, pid } = req.query;
 
@@ -330,7 +330,7 @@ router.route('/annotation/').get(async (req, res) => {
     let htf_results = await TF['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let effector_results = await Effector['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
 
-    console.log(hinterpro_results)
+    // console.log(hinterpro_results)
 
     // Filter out duplicate JSON objects
     hgo_results = filterDuplicates(hgo_results);
@@ -433,7 +433,7 @@ router.route('/domain_download/').post(async (req, res) => {
         query.Pathogen_Protein = { $in: body.genes};
       }
     }
-   console.log(query)
+   // console.log(query)
     const [final] = await Promise.all([
       Results.find(query),
     ]);
@@ -472,7 +472,7 @@ router.route('/domain_results/').post(async (req, res) => {
     else{
       species = body.pathogen.toLowerCase()
     }
-    console.log(species)
+    // console.log(species)
     if (body.anotType === 'go'){
       const query = {
         $or: [
@@ -491,7 +491,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await GO[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -509,7 +509,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await Local[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -528,7 +528,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await KEGG[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -546,11 +546,11 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await TF[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
-    
+
     if (body.anotType === 'interpro') {
       const isInteger = Number.isInteger(parseInt(body.keyword));
       const query = {
@@ -571,7 +571,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await Interpro[body.ids].find(query);
   
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length);
+      // // console.log(geneArray.length);
       genes = geneArray.join(',');
   }
   
@@ -589,7 +589,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await Effector[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -609,7 +609,7 @@ router.route('/domain_results/').post(async (req, res) => {
         query.Pathogen_Protein = { $in: genes};
       }
     }
-   console.log(query)
+   // console.log(query)
     const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
       Results.count(query),
@@ -672,7 +672,7 @@ router.route('/go/').get(async (req, res) => {
     // Fetch distinct term counts
     let knum = await GO[sptype].distinct('term');
     
-    console.log(knum.length);
+    // console.log(knum.length);
     
     // Send response with data and total count
     res.json({ 'data': go_results, 'total': total });
