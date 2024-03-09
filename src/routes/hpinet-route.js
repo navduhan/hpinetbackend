@@ -138,7 +138,7 @@ router.route('/ppi').post(async (req, res) => {
           { "description": { $regex: body.keyword} }
           
         ],
-        'species':{$regex: species, $options: i}
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await KEGG[body.ids].find(query)
