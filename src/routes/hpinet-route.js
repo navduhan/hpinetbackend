@@ -550,28 +550,31 @@ router.route('/domain_results/').post(async (req, res) => {
       genes = geneArray.join(',');
       
     }
-    if (body.anotType === 'interpro'){
+    
+    if (body.anotType === 'interpro') {
+      const isInteger = Number.isInteger(parseInt(body.keyword));
       const query = {
-        $or: [
-          
-          { "gene": { $regex: body.keyword, $options: "i"} },
-          { "length": { $regex: body.keyword, $options: "i"} },
-          { "interpro_id": { $regex: body.keyword, $options: "i"} },
-          { "sourcedb": { $regex: body.keyword, $options: "i"} },
-          { "domain": { $regex: body.keyword, $options: "i"} },
-          { "domain_description": { $regex: body.keyword, $options: "i"} }
-        
-        ],
-        'species':{$regex: species, $options: "i"}
+          $or: [
+              { "gene": { $regex: body.keyword, $options: 'i' } },
+              { "interpro_id": { $regex: body.keyword, $options: 'i' } },
+              { "sourcedb": { $regex: body.keyword, $options: 'i' } },
+              { "domain": { $regex: body.keyword, $options: 'i' } },
+              { "domain_description": { $regex: body.keyword, $options: 'i' } }
+          ],
+          'species': { $regex: species, $options: "i" }
+      };
+  
+      if (isInteger) {
+          query.$or.push({ "length": parseInt(body.keyword) });
       }
-
-      keyword_data = await Interpro[body.ids].find(query)
-      
+  
+      keyword_data = await Interpro[body.ids].find(query);
+  
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      console.log(geneArray.length);
       genes = geneArray.join(',');
-      
-    }
+  }
+  
     if (body.anotType === 'virulence'){
       const query = {
         $or: [
