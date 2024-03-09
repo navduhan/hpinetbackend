@@ -147,27 +147,25 @@ router.route('/ppi').post(async (req, res) => {
       genes = geneArray.join(',');
       
     }
-    if (body.anotType === 'tf'){
+    if (body.anotType === 'tf') {
       const query = {
-        $or: [
-          
-          { "gene": { $regex: body.keyword, '$options': 'i'} },
-          { "tf_family": { $regex: body.keyword, '$options': 'i'} }
-        
-        ],
-        'species':species.toUpperCase()
-      }
-
-      console.log(query)
-      keyword_data = await TF[body.ids].find(query)
-
-      console.log(keyword_data)
-      
+          $or: [
+              { "gene": { $regex: body.keyword, $options: 'i' } },
+              { "tf_family": { $regex: body.keyword, $options: 'i' } }
+          ],
+          'species': species.toUpperCase()
+      };
+  
+      console.log(query);
+      keyword_data = await TF[body.ids].find(query);
+  
+      console.log(keyword_data);
+  
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      console.log(geneArray.length);
       genes = geneArray.join(',');
-      
-    }
+  }
+  
     if (body.anotType === 'interpro'){
       const query = {
         $or: [
