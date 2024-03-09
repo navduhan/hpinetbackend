@@ -151,13 +151,14 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "tf_family": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, '$options': 'i'} },
+          { "tf_family": { $regex: body.keyword, '$options': 'i'} }
         
         ],
         'species':species.toUpperCase()
       }
 
+      console.log(query)
       keyword_data = await TF[body.ids].find(query)
 
       console.log(keyword_data)
