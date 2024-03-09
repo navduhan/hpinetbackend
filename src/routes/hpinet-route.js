@@ -600,17 +600,12 @@ router.route('/domain_results/').post(async (req, res) => {
     
   }
 
-  if (genes.length !==0 | body.keyword ){
-    isgenes= "True"
- }
- else{
-    isgenes = "False"
- }
+
 
 
     const query = { intdb: { $in: body.intdb } };
 
-    if (genes.length !==0 | body.keyword ) {
+    if (genes.length !==0 || body.keyword ) {
       if (body.idt === 'host') {
         query.Host_Protein = { $in: genes };
       } else if (body.idt === 'pathogen') {
