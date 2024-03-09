@@ -600,22 +600,16 @@ router.route('/domain_results/').post(async (req, res) => {
     
   }
 
-//   if (genes.length !==0 || body.keyword || genes != '' ){
-//     isgenes= "True"
-//  }
-//  else{
-//     isgenes = "False"
-//  }
 
     const query = { intdb: { $in: body.intdb } };
 
-//     if (isgenes ) {
-//       if (body.idt === 'host') {
-//         query.Host_Protein = { $in: genes };
-//       } else if (body.idt === 'pathogen') {
-//         query.Pathogen_Protein = { $in: genes};
-//       }
-//     }
+    if (genes.length !==0 | body.keyword ) {
+      if (body.idt === 'host') {
+        query.Host_Protein = { $in: genes };
+      } else if (body.idt === 'pathogen') {
+        query.Pathogen_Protein = { $in: genes};
+      }
+    }
    console.log(query)
     const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
