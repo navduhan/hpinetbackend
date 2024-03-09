@@ -461,7 +461,7 @@ router.route('/domain_results/').post(async (req, res) => {
     let isgenes;
   
   
-  let genes = ''; // Initialize genes to an empty string
+  let genes; // Initialize genes to an empty string
   let species;
 
   if (body.searchType ==='keyword'){
@@ -600,15 +600,22 @@ router.route('/domain_results/').post(async (req, res) => {
     
   }
 
+  if (genes.length !==0 | body.keyword ){
+    isgenes= "True"
+ }
+ else{
+    isgenes = "False"
+ }
+
     const query = { intdb: { $in: body.intdb } };
 
-    // if (genes.length !==0 || body.keyword && genes ) {
+    if (isgenes ) {
       if (body.idt === 'host') {
         query.Host_Protein = { $in: genes };
       } else if (body.idt === 'pathogen') {
         query.Pathogen_Protein = { $in: genes};
       }
-    // }
+    }
    console.log(query)
     const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
