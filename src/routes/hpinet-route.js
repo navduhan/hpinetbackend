@@ -357,14 +357,30 @@ router.route('/annotation/').get(async (req, res) => {
   }
 });
 
+function areObjectsEqual(obj1, obj2) {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) {
+      return false;
+  }
+
+  for (const key of keys1) {
+      if (obj1[key] !== obj2[key]) {
+          return false;
+      }
+  }
+
+  return true;
+}
+
 function filterDuplicates(results) {
-  const seen = new Set();
   const uniqueResults = [];
 
   for (const result of results) {
       let isDuplicate = false;
       for (const uniqueResult of uniqueResults) {
-          if (JSON.stringify(result) === JSON.stringify(uniqueResult)) {
+          if (areObjectsEqual(result, uniqueResult)) {
               isDuplicate = true;
               break;
           }
