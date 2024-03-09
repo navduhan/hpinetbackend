@@ -457,6 +457,7 @@ router.route('/domain_results/').post(async (req, res) => {
     const limit = size;
     const skip = (page - 1) * size;
     const resultsdb = mongoose.connection.useDb("hpinetdb");
+    const upresults = mongoose.connection.useDb("hpinetdb_results");
     const Results = resultsdb.model(table, DomainSchema);
     let isgenes;
   
@@ -611,21 +612,29 @@ router.route('/domain_results/').post(async (req, res) => {
       }
     }
    console.log(query)
-    const [final, counts, hostProtein, pathogenProtein, download] = await Promise.all([
+    const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
       Results.count(query),
       Results.distinct("Host_Protein", query),
-      Results.distinct("Pathogen_Protein", query),
-      Results.find(query).limit(limit).skip(skip).lean().exec()
+      Results.distinct("Pathogen_Protein", query)
     ]);
     
+    const timestamp = new Date().getTime(); // Get current timestamp
+    const tableName = `hpinet${timestamp}results`; // Construct table name with timestamp
+
+    // Create a new MongoDB collection with the timestamp-based name
+    const newCollection = upresults.collection(tableName);
+
+    // Insert the data into the new collection
+    await newCollection.insertMany({
+    final
+    });
 
     res.json({
       results: final,
       total: counts,
       hostcount: hostProtein.length,
       pathogencount: pathogenProtein.length,
-      download: download
     });
   } catch (error) {
     console.error(error);
