@@ -619,15 +619,22 @@ router.route('/domain_results/').post(async (req, res) => {
       Results.distinct("Pathogen_Protein", query)
     ]);
     
+
     const timestamp = new Date().getTime(); // Get current timestamp
     const tableName = `hpinet${timestamp}results`; // Construct table name with timestamp
 
     // Create a new MongoDB collection with the timestamp-based name
     const newCollection = upresults.collection(tableName);
 
+    const finalArray = Array.isArray(final) ? final : [final];
+
+    if (finalArray.some(item => typeof item !== 'object' || item === null)) {
+      throw new Error('Invalid document found in final array');
+  }
+  console.log(finalArray)
     // Insert the data into the new collection
     await newCollection.insertMany({
-    final
+    finalArray
     });
 
     res.json({
