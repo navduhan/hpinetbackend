@@ -622,7 +622,7 @@ router.route('/domain_results/').post(async (req, res) => {
 
     const timestamp = new Date().getTime(); // Get current timestamp
     const tableName = `hpinet${timestamp}results`; // Construct table name with timestamp
-
+    console.log(tableName)
     // Create a new MongoDB collection with the timestamp-based name
     const newCollection = upresults.collection(tableName);
 
