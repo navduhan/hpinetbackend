@@ -461,7 +461,7 @@ router.route('/domain_results/').post(async (req, res) => {
     let isgenes;
   
   
-  let genes;
+  let genes = ''; // Initialize genes to an empty string
   let species;
 
   if (body.searchType ==='keyword'){
@@ -605,7 +605,7 @@ router.route('/domain_results/').post(async (req, res) => {
 
     const query = { intdb: { $in: body.intdb } };
 
-    if (genes.length !==0 || body.keyword ) {
+    if (genes.length !==0 || body.keyword && genes ) {
       if (body.idt === 'host') {
         query.Host_Protein = { $in: genes };
       } else if (body.idt === 'pathogen') {
