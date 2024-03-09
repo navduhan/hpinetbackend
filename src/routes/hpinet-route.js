@@ -313,7 +313,9 @@ router.route('/annotation/').get(async (req, res) => {
     const rhid = splithost(hid);
 
     // Convert host, pathogen, and species to lowercase for case insensitivity
-
+    host = host.toLocaleLowerCase()
+    pathogen = pathogen.toLocaleLowerCase()
+    
     // Perform case-insensitive search for genes and species
     let hgo_results = await GO['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let pgo_results = await GO['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
