@@ -362,9 +362,14 @@ function filterDuplicates(results) {
   const uniqueResults = [];
 
   for (const result of results) {
-      const jsonStr = JSON.stringify(result);
-      if (!seen.has(jsonStr)) {
-          seen.add(jsonStr);
+      let isDuplicate = false;
+      for (const uniqueResult of uniqueResults) {
+          if (JSON.stringify(result) === JSON.stringify(uniqueResult)) {
+              isDuplicate = true;
+              break;
+          }
+      }
+      if (!isDuplicate) {
           uniqueResults.push(result);
       }
   }
