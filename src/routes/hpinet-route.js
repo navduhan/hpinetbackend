@@ -319,17 +319,17 @@ router.route('/annotation/').get(async (req, res) => {
     // Perform case-insensitive search for genes and species
     let hgo_results = await GO['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let pgo_results = await GO['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
-    let hkegg_results = await KEGG['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + rhid + '$', 'i') } });
+    let hkegg_results = await KEGG['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let pkegg_results = await KEGG['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
     let hlocal_results = await Local['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let plocal_results = await Local['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
-    let hinterpro_results = await Interpro['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + rhid + '$', 'i') } });
+    let hinterpro_results = await Interpro['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let pinterpro_results = await Interpro['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
     let htf_results = await TF['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let effector_results = await Effector['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
 
     console.log(hinterpro_results)
-    
+
     // Filter out duplicate JSON objects
     hgo_results = filterDuplicates(hgo_results);
     pgo_results = filterDuplicates(pgo_results);
