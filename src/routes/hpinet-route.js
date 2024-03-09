@@ -635,6 +635,7 @@ router.route('/domain_results/').post(async (req, res) => {
       total: counts,
       hostcount: hostProtein.length,
       pathogencount: pathogenProtein.length,
+      resultid: tableName
     });
   } catch (error) {
     console.error(error);
