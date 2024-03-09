@@ -589,7 +589,7 @@ router.route('/domain_results/').post(async (req, res) => {
       keyword_data = await Effector[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
-      console.log(geneArray.length)
+      // console.log(geneArray.length)
       genes = geneArray.join(',');
       
     }
@@ -600,7 +600,7 @@ router.route('/domain_results/').post(async (req, res) => {
     
   }
 
-  if (genes.length !==0 | body.keyword || genes != '' ){
+  if (genes.length !==0 || body.keyword || genes != '' ){
     isgenes= "True"
  }
  else{
