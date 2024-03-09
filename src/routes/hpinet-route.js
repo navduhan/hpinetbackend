@@ -76,7 +76,6 @@ router.route('/ppi').post(async (req, res) => {
   console.log(body.anotType)
   let isgenes;
   
-  
   let genes;
   let species;
 
@@ -93,15 +92,15 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "term": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} },
-          { "definition": { $regex: body.keyword } },
-          { "evidence": { $regex: body.keyword} },
-          { "ontology": { $regex: body.keyword } },
+          { "gene": { $regex: body.keyword, $options: 'i' } },
+          { "term": { $regex: body.keyword, $options: 'i' } },
+          { "description": { $regex: body.keyword, $options: 'i' } },
+          { "definition": { $regex: body.keyword, $options: 'i' } },
+          { "evidence": { $regex: body.keyword, $options: 'i' } },
+          { "ontology": { $regex: body.keyword, $options: 'i' } },
           
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await GO[body.ids].find(query)
@@ -115,11 +114,11 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "location": { $regex: body.keyword} },
+          { "gene": { $regex: body.keyword, $options: 'i' } },
+          { "location": { $regex: body.keyword, $options: 'i' } },
           
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await Local[body.ids].find(query)
@@ -133,9 +132,9 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "pathway": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, $options: 'i' } },
+          { "pathway": { $regex: body.keyword, $options: 'i' } },
+          { "description": { $regex: body.keyword, $options: 'i' } }
           
         ],
         'species':{$regex: species, $options: "i"}
@@ -154,7 +153,7 @@ router.route('/ppi').post(async (req, res) => {
               { "gene": { $regex: body.keyword, $options: 'i' } },
               { "tf_family": { $regex: body.keyword, $options: 'i' } }
           ],
-          'species': species.toUpperCase()
+          'species':{$regex: species, $options: "i"}
       };
   
       console.log(query);
@@ -171,15 +170,15 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "length": { $regex: body.keyword} },
-          { "interpro_id": { $regex: body.keyword} },
-          { "sourcedb": { $regex: body.keyword} },
-          { "domain": { $regex: body.keyword} },
-          { "domain_description": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, $options: 'i' } },
+          { "length": { $regex: body.keyword, $options: 'i' } },
+          { "interpro_id": { $regex: body.keyword, $options: 'i' } },
+          { "sourcedb": { $regex: body.keyword, $options: 'i' } },
+          { "domain": { $regex: body.keyword, $options: 'i' } },
+          { "domain_description": { $regex: body.keyword, $options: 'i' } }
         
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await Interpro[body.ids].find(query)
@@ -193,13 +192,13 @@ router.route('/ppi').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} },
-          { "type": { $regex: body.keyword} },
+          { "gene": { $regex: body.keyword, $options: 'i' } },
+          { "description": { $regex: body.keyword, $options: 'i' } },
+          { "type": { $regex: body.keyword, $options: 'i' } },
         
         
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await Effector[body.ids].find(query)
@@ -212,7 +211,7 @@ router.route('/ppi').post(async (req, res) => {
   }
   else{
 
-    genes =body.genes
+    genes = body.genes
     
   }
 
