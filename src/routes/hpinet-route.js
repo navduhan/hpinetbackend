@@ -120,7 +120,7 @@ router.route('/ppi').post(async (req, res) => {
         'species':species
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Local[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -139,7 +139,7 @@ router.route('/ppi').post(async (req, res) => {
         'species':species
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await KEGG[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -157,7 +157,7 @@ router.route('/ppi').post(async (req, res) => {
         'species':species
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await TF[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -179,7 +179,7 @@ router.route('/ppi').post(async (req, res) => {
         'species':species
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Interpro[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -199,7 +199,7 @@ router.route('/ppi').post(async (req, res) => {
         'species':species
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Effector[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
