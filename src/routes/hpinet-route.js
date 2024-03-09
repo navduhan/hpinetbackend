@@ -600,7 +600,7 @@ router.route('/domain_results/').post(async (req, res) => {
     
   }
 
-  if (genes.length !==0 | body.keyword || genes == '' ){
+  if (genes.length !==0 | body.keyword || genes != '' ){
     isgenes= "True"
  }
  else{
