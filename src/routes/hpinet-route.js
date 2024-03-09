@@ -313,7 +313,6 @@ router.route('/annotation/').get(async (req, res) => {
     const rhid = splithost(hid);
 
     // Convert host, pathogen, and species to lowercase for case insensitivity
-  
 
     // Perform case-insensitive search for genes and species
     let hgo_results = await GO['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
@@ -326,6 +325,18 @@ router.route('/annotation/').get(async (req, res) => {
     let pinterpro_results = await Interpro['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
     let htf_results = await TF['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
     let effector_results = await Effector['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
+
+    // Filter out duplicate JSON objects
+    hgo_results = filterDuplicates(hgo_results);
+    pgo_results = filterDuplicates(pgo_results);
+    hkegg_results = filterDuplicates(hkegg_results);
+    pkegg_results = filterDuplicates(pkegg_results);
+    hlocal_results = filterDuplicates(hlocal_results);
+    plocal_results = filterDuplicates(plocal_results);
+    hinterpro_results = filterDuplicates(hinterpro_results);
+    pinterpro_results = filterDuplicates(pinterpro_results);
+    htf_results = filterDuplicates(htf_results);
+    effector_results = filterDuplicates(effector_results);
 
     res.json({
       'hgo': hgo_results,
@@ -345,6 +356,19 @@ router.route('/annotation/').get(async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+function filterDuplicates(results) {
+  const uniqueResults = [];
+  const seen = new Set();
+  for (const result of results) {
+    const jsonStr = JSON.stringify(result);
+    if (!seen.has(jsonStr)) {
+      seen.add(jsonStr);
+      uniqueResults.push(result);
+    }
+  }
+  return uniqueResults;
+}
 
 
 router.route('/download/').get(async (req, res) => {
