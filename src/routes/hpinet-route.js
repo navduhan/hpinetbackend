@@ -577,53 +577,64 @@ router.route('/network/').get(async (req, res) => {
 
 router.route('/go/').get(async (req, res) => {
 
-  let { species, sptype, page, size } = req.query
-  if (!page) {
-    page = 1
+  let { species, sptype, page, size } = req.query;
+  
+  // Default values for page and size
+  let pageNumber = parseInt(page) || 1;
+  let pageSize = parseInt(size) || 10;
+  
+  // Calculate skip based on pagination
+  const skip = (pageNumber - 1) * pageSize;
+
+  try {
+    // Query to fetch GO results with case-insensitive species matching
+    let go_results = await GO[sptype].find({ 'species': { $regex: new RegExp(species, 'i') } }).limit(pageSize).skip(skip).exec();
+    
+    // Count total matching documents
+    let total = await GO[sptype].countDocuments({ 'species': { $regex: new RegExp(species, 'i') } });
+    
+    // Fetch distinct term counts
+    let knum = await GO[sptype].distinct('term');
+    
+    console.log(knum.length);
+    
+    // Send response with data and total count
+    res.json({ 'data': go_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
 
-  const limit = parseInt(size)
+});
 
-  const skip = (page - 1) * size;
-
-  let go_results = await GO[sptype].find({ 'species': { '$in': {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await GO[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
-  let knum = await GO[sptype].distinct('term')
-  console.log(knum.length)
-  res.json({ 'data': go_results, 'total': total })
-
-})
 
 
 router.route('/kegg/').get(async (req, res) => {
+  try {
+    let { species, sptype, page, size } = req.query;
 
-  let { species, sptype, page, size } = req.query
-  if (!page) {
-    page = 1
+    // Default values for page and size
+    let pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(size) || 10;
+
+    // Calculate skip based on pagination
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Query to fetch KEGG results with case-insensitive species matching
+    let kegg_results = await KEGG[sptype].find({ 'species': { $regex: new RegExp(species, 'i') } }).limit(pageSize).skip(skip).exec();
+
+    // Count total matching documents
+    let total = await KEGG[sptype].countDocuments({ 'species': { $regex: new RegExp(species, 'i') } });
+
+    // Send response with data and total count
+    res.json({ 'data': kegg_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
-
-  const limit = parseInt(size)
-
-  const skip = (page - 1) * size;
-
-  let kegg_results = await KEGG[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await KEGG[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
-
-  res.json({ 'data': kegg_results, 'total': total })
-
-})
+});
 
 router.route('/interpro/').get(async (req, res) => {
 
