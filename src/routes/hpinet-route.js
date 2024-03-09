@@ -71,6 +71,7 @@ function splithost(string) {
 router.route('/ppi').post(async (req, res) => {
 
   const body = JSON.parse(JSON.stringify(req.body));
+  
   console.log(body)
   let isgenes;
   
@@ -158,6 +159,8 @@ router.route('/ppi').post(async (req, res) => {
       }
 
       keyword_data = await TF[body.ids].find(query)
+
+      console.log(keyword_data)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
