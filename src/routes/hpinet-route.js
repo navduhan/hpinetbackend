@@ -410,15 +410,15 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "term": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} },
-          { "definition": { $regex: body.keyword } },
-          { "evidence": { $regex: body.keyword} },
-          { "ontology": { $regex: body.keyword } },
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "term": { $regex: body.keyword, $options: "i"} },
+          { "description": { $regex: body.keyword, $options: "i"} },
+          { "definition": { $regex: body.keyword, $options: "i" } },
+          { "evidence": { $regex: body.keyword, $options: "i"} },
+          { "ontology": { $regex: body.keyword, $options: "i" } },
           
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
       keyword_data = await GO[body.ids].find(query)
@@ -432,14 +432,14 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "location": { $regex: body.keyword} },
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "location": { $regex: body.keyword, $options: "i"} },
           
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Local[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -450,15 +450,15 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "pathway": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "pathway": { $regex: body.keyword, $options: "i"} },
+          { "description": { $regex: body.keyword, $options: "i"} }
           
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await KEGG[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -469,14 +469,14 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "tf_family": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "tf_family": { $regex: body.keyword, $options: "i"} }
         
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await TF[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -487,18 +487,18 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "length": { $regex: body.keyword} },
-          { "interpro_id": { $regex: body.keyword} },
-          { "sourcedb": { $regex: body.keyword} },
-          { "domain": { $regex: body.keyword} },
-          { "domain_description": { $regex: body.keyword} }
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "length": { $regex: body.keyword, $options: "i"} },
+          { "interpro_id": { $regex: body.keyword, $options: "i"} },
+          { "sourcedb": { $regex: body.keyword, $options: "i"} },
+          { "domain": { $regex: body.keyword, $options: "i"} },
+          { "domain_description": { $regex: body.keyword, $options: "i"} }
         
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Interpro[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -509,14 +509,14 @@ router.route('/domain_results/').post(async (req, res) => {
       const query = {
         $or: [
           
-          { "gene": { $regex: body.keyword} },
-          { "description": { $regex: body.keyword} },
-          { "type": { $regex: body.keyword} },
+          { "gene": { $regex: body.keyword, $options: "i"} },
+          { "description": { $regex: body.keyword, $options: "i"} },
+          { "type": { $regex: body.keyword, $options: "i"} },
         ],
-        'species':species
+        'species':{$regex: species, $options: "i"}
       }
 
-      keyword_data = await GO[body.ids].find(query)
+      keyword_data = await Effector[body.ids].find(query)
       
       const geneArray = keyword_data.map(obj => obj.gene);
       console.log(geneArray.length)
@@ -592,8 +592,8 @@ router.route('/go/').get(async (req, res) => {
 
   const skip = (page - 1) * size;
 
-  let go_results = await GO[sptype].find({ 'species': { '$in': species.toLowerCase() } }).limit(limit).skip(skip).exec()
-  let total = await GO[sptype].find({ 'species': { '$in': species.toLowerCase() } }).count()
+  let go_results = await GO[sptype].find({ 'species': { '$in': {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
+  let total = await GO[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
   let knum = await GO[sptype].distinct('term')
   console.log(knum.length)
   res.json({ 'data': go_results, 'total': total })
@@ -618,8 +618,8 @@ router.route('/kegg/').get(async (req, res) => {
 
   const skip = (page - 1) * size;
 
-  let kegg_results = await KEGG[sptype].find({ 'species': { '$in': species } }).limit(limit).skip(skip).exec()
-  let total = await KEGG[sptype].find({ 'species': { '$in': species } }).count()
+  let kegg_results = await KEGG[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
+  let total = await KEGG[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
 
   res.json({ 'data': kegg_results, 'total': total })
 
@@ -642,8 +642,8 @@ router.route('/interpro/').get(async (req, res) => {
 
   const skip = (page - 1) * size;
 
-  let interpro_results = await Interpro[sptype].find({ 'species': { '$in': species } }).limit(limit).skip(skip).exec()
-  let total = await Interpro[sptype].find({ 'species': { '$in': species } }).count()
+  let interpro_results = await Interpro[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
+  let total = await Interpro[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
 
   res.json({ 'data': interpro_results, 'total': total })
 
@@ -666,8 +666,8 @@ router.route('/local/').get(async (req, res) => {
 
   const skip = (page - 1) * size;
 
-  let local_results = await Local[sptype].find({ 'species': { '$in': species } }).limit(limit).skip(skip).exec()
-  let total = await Local[sptype].find({ 'species': { '$in': species } }).count()
+  let local_results = await Local[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
+  let total = await Local[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
 
   res.json({ 'data': local_results, 'total': total })
 
@@ -691,8 +691,8 @@ router.route('/tf/').get(async (req, res) => {
 
   const skip = (page - 1) * size;
 
-  let transcription_results = await TF[sptype].find({ 'species': { '$in': species } }).limit(limit).skip(skip).exec()
-  let total = await TF[sptype].find({ 'species': { '$in': species } }).count()
+  let transcription_results = await TF[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
+  let total = await TF[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
 
   res.json({ 'data': transcription_results, 'total': total })
 
@@ -712,14 +712,14 @@ router.route('/effector/').get(async (req, res) => {
   }
 
   let query = {
-    'species': species
+    'species':  {$regex: species, $options: "i"}
   }
   console.log(species)
   const limit = parseInt(size)
 
   const skip = (page - 1) * size;
 
-  let effector_results = await Effector['pathogen'].find({ 'species': { '$in': species } }).limit(limit).skip(skip).exec()
+  let effector_results = await Effector['pathogen'].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
   let total = await Effector['pathogen'].count(query)
   console.log(effector_results)
   res.json({ 'data': effector_results, 'total': total })
