@@ -607,7 +607,7 @@ router.route('/domain_results/').post(async (req, res) => {
 //     isgenes = "False"
 //  }
 
-//     const query = { intdb: { $in: body.intdb } };
+    const query = { intdb: { $in: body.intdb } };
 
 //     if (isgenes ) {
 //       if (body.idt === 'host') {
