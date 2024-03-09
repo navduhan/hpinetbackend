@@ -611,11 +611,12 @@ router.route('/domain_results/').post(async (req, res) => {
       }
     }
    console.log(query)
-    const [final, counts, hostProtein, pathogenProtein] = await Promise.all([
+    const [final, counts, hostProtein, pathogenProtein, download] = await Promise.all([
       Results.find(query).limit(limit).skip(skip).lean().exec(),
       Results.count(query),
       Results.distinct("Host_Protein", query),
       Results.distinct("Pathogen_Protein", query),
+      Results.find(query).limit(limit).skip(skip).lean().exec()
     ]);
     
 
@@ -624,6 +625,7 @@ router.route('/domain_results/').post(async (req, res) => {
       total: counts,
       hostcount: hostProtein.length,
       pathogencount: pathogenProtein.length,
+      download: download
     });
   } catch (error) {
     console.error(error);
