@@ -304,51 +304,66 @@ router.route('/results/').get(async (req, res) => {
   }
 });
 
-router.route('/annotation/').get(async(req,res) =>{
+router.route('/annotation/').get(async (req, res) => {
+  try {
+    console.log(req.query);
 
-console.log(req.query)
+    let { host, pathogen, hid, pid } = req.query;
 
-let {host, pathogen, hid, pid} =req.query
+    const rhid = splithost(hid);
 
-const rhid = splithost(hid)
+    // Convert host, pathogen, and species to lowercase for case insensitivity
+  
 
+    // Perform case-insensitive search for genes and species
+    let hgo_results = await GO['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
+    let pgo_results = await GO['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
+    let hkegg_results = await KEGG['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + rhid + '$', 'i') } });
+    let pkegg_results = await KEGG['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
+    let hlocal_results = await Local['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
+    let plocal_results = await Local['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
+    let hinterpro_results = await Interpro['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + rhid + '$', 'i') } });
+    let pinterpro_results = await Interpro['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
+    let htf_results = await TF['host'].find({ 'species': { $regex: new RegExp(host, 'i') }, 'gene': { $regex: new RegExp('^' + hid + '$', 'i') } });
+    let effector_results = await Effector['pathogen'].find({ 'species': { $regex: new RegExp(pathogen, 'i') }, 'gene': { $regex: new RegExp('^' + pid + '$', 'i') } });
 
-let hgo_results = await GO['host'].find({'species': host.toLowerCase() , 'gene':hid})
-let pgo_results = await GO['pathogen'].find({'species': pathogen, 'gene':pid})
-let hkegg_results = await KEGG['host'].find({'species': host, 'gene':rhid})
-let pkegg_results = await KEGG['pathogen'].find({'species': pathogen , 'gene':pid})
-let hlocal_results = await Local['host'].find({'species': host.toLowerCase() , 'gene':hid})
-let plocal_results = await Local['pathogen'].find({'species': pathogen, 'gene':pid})
-let hinterpro_results = await Interpro['host'].find({'species': host.toLowerCase() , 'gene':rhid})
-let pinterpro_results = await Interpro['pathogen'].find({'species': pathogen , 'gene':pid})
-let htf_results = await TF['host'].find({'species': host, 'gene':hid})
-let effector_results = await Effector['pathogen'].find({'species': pathogen, 'gene': pid})
-
-res.json({
-'hgo': hgo_results, 
-'pgo':pgo_results, 
-'hkegg': hkegg_results, 
-'pkegg':pkegg_results, 
-'hlocal':hlocal_results, 
-'plocal':plocal_results, 
-'htf':htf_results,
-'peff':effector_results, 
-'hint':hinterpro_results, 
-'pint':pinterpro_results})
-})
+    res.json({
+      'hgo': hgo_results,
+      'pgo': pgo_results,
+      'hkegg': hkegg_results,
+      'pkegg': pkegg_results,
+      'hlocal': hlocal_results,
+      'plocal': plocal_results,
+      'htf': htf_results,
+      'peff': effector_results,
+      'hint': hinterpro_results,
+      'pint': pinterpro_results
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 router.route('/download/').get(async (req, res) => {
-  let { results } = req.query
+  try {
+    let { results } = req.query;
 
-  const resultsdb = mongoose.connection.useDb("hpinet_results")
-  const Results = resultsdb.model(results, wheatSchema)
+    const resultsdb = mongoose.connection.useDb("hpinet_results");
+    const Results = resultsdb.model(results, wheatSchema);
 
-  let final = await Results.find({})
+    let final = await Results.find({}).exec();
 
-  res.json({ 'results': final })
+    res.json({ 'results': final });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-})
 
 router.route('/domain_download/').post(async (req, res) => {
   try {
@@ -562,18 +577,24 @@ router.route('/domain_results/').post(async (req, res) => {
 
 
 router.route('/network/').get(async (req, res) => {
-  let { results } = req.query
+  try {
+    let { results } = req.query;
 
-  const resultsdb = mongoose.connection.useDb("hpinet_results")
-  const Results = resultsdb.model(results, wheatSchema)
+    const resultsdb = mongoose.connection.useDb("hpinet_results");
+    const Results = resultsdb.model(results, wheatSchema);
 
-  let final = await Results.find().exec()
-  let counts = await Results.count()
-  let host_protein = await Results.distinct("Host_Protein")
-  let pathogen_protein = await Results.distinct('Pathogen_Protein')
-  res.json({ 'results': final, 'total': counts, 'hostcount': host_protein.length, 'pathogencount': pathogen_protein.length })
+    let final = await Results.find().exec();
+    let counts = await Results.countDocuments();
+    let host_protein = await Results.distinct("Host_Protein");
+    let pathogen_protein = await Results.distinct('Pathogen_Protein');
+    res.json({ 'results': final, 'total': counts, 'hostcount': host_protein.length, 'pathogencount': pathogen_protein.length });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-})
 
 router.route('/go/').get(async (req, res) => {
 
@@ -609,7 +630,6 @@ router.route('/go/').get(async (req, res) => {
 });
 
 
-
 router.route('/kegg/').get(async (req, res) => {
   try {
     let { species, sptype, page, size } = req.query;
@@ -637,104 +657,113 @@ router.route('/kegg/').get(async (req, res) => {
 });
 
 router.route('/interpro/').get(async (req, res) => {
+  try {
+    let { species, sptype, page, size } = req.query;
 
-  let { species, sptype, page, size } = req.query
-  if (!page) {
-    page = 1
+    // Default values for page and size
+    let pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(size) || 10;
+
+    // Calculate skip based on pagination
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Query to fetch Interpro results with case-insensitive species matching
+    let interpro_results = await Interpro[sptype].find({ 'species': { $regex: new RegExp(species, 'i') } }).limit(pageSize).skip(skip).exec();
+
+    // Count total matching documents
+    let total = await Interpro[sptype].countDocuments({ 'species': { $regex: new RegExp(species, 'i') } });
+
+    // Send response with data and total count
+    res.json({ 'data': interpro_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
+});
 
-  const limit = parseInt(size)
-
-  const skip = (page - 1) * size;
-
-  let interpro_results = await Interpro[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await Interpro[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
-
-  res.json({ 'data': interpro_results, 'total': total })
-
-})
 
 router.route('/local/').get(async (req, res) => {
+  try {
+    let { species, sptype, page, size } = req.query;
 
-  let { species, sptype, page, size } = req.query
-  if (!page) {
-    page = 1
+    // Default values for page and size
+    let pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(size) || 10;
+
+    // Calculate skip based on pagination
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Query to fetch Localization results with case-insensitive species matching
+    let local_results = await Local[sptype].find({ 'species': { $regex: new RegExp(species, 'i') } }).limit(pageSize).skip(skip).exec();
+
+    // Count total matching documents
+    let total = await Local[sptype].countDocuments({ 'species': { $regex: new RegExp(species, 'i') } });
+
+    // Send response with data and total count
+    res.json({ 'data': local_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
-
-  const limit = parseInt(size)
-
-  const skip = (page - 1) * size;
-
-  let local_results = await Local[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await Local[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
-
-  res.json({ 'data': local_results, 'total': total })
-
-})
+});
 
 router.route('/tf/').get(async (req, res) => {
+  try {
+    let { species, sptype, page, size } = req.query;
 
-  let { species, sptype, page, size } = req.query
-  if (!page) {
-    page = 1
+    // Default values for page and size
+    let pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(size) || 10;
+
+    // Calculate skip based on pagination
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Query to fetch TF results with case-insensitive species matching
+    let transcription_results = await TF[sptype].find({ 'species': { $regex: new RegExp(species, 'i') } }).limit(pageSize).skip(skip).exec();
+
+    // Count total matching documents
+    let total = await TF[sptype].countDocuments({ 'species': { $regex: new RegExp(species, 'i') } });
+
+    // Send response with data and total count
+    res.json({ 'data': transcription_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
-
-
-  const limit = parseInt(size)
-
-  const skip = (page - 1) * size;
-
-  let transcription_results = await TF[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await TF[sptype].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).count()
-
-  res.json({ 'data': transcription_results, 'total': total })
-
-})
+});
 
 router.route('/effector/').get(async (req, res) => {
+  try {
+    let { species, page, size } = req.query;
 
-  let { species, page, size } = req.query
-  if (!page) {
-    page = 1
+    // Default values for page and size
+    let pageNumber = parseInt(page) || 1;
+    let pageSize = parseInt(size) || 10;
+
+    // Calculate skip based on pagination
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Query to fetch Effector results with case-insensitive species matching
+    let query = {
+      'species': { $regex: new RegExp(species, 'i') }
+    };
+
+    const limit = parseInt(size);
+
+    let effector_results = await Effector['pathogen'].find(query).limit(limit).skip(skip).exec();
+
+    // Count total matching documents
+    let total = await Effector['pathogen'].countDocuments(query);
+
+    res.json({ 'data': effector_results, 'total': total });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (page) {
-    page = parseInt(page) + 1
-  }
-  if (!size) {
-    size = 10
-  }
-
-  let query = {
-    'species':  {$regex: species, $options: "i"}
-  }
-  console.log(species)
-  const limit = parseInt(size)
-
-  const skip = (page - 1) * size;
-
-  let effector_results = await Effector['pathogen'].find({ 'species': { '$in':  {$regex: species, $options: "i"} } }).limit(limit).skip(skip).exec()
-  let total = await Effector['pathogen'].count(query)
-  console.log(effector_results)
-  res.json({ 'data': effector_results, 'total': total })
-
-})
+});
 
 module.exports = router;
