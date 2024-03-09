@@ -73,6 +73,7 @@ router.route('/ppi').post(async (req, res) => {
   const body = JSON.parse(JSON.stringify(req.body));
 
   console.log(body.keyword)
+  console.log(body.anotType)
   let isgenes;
   
   
