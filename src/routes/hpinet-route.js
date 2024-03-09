@@ -457,7 +457,7 @@ router.route('/domain_results/').post(async (req, res) => {
     const limit = size;
     const skip = (page - 1) * size;
     const resultsdb = mongoose.connection.useDb("hpinetdb");
-    const upresults = mongoose.connection.useDb("hpinetdb_results");
+    const upresults = mongoose.connection.useDb("hpinet_results");
     const Results = resultsdb.model(table, DomainSchema);
     let isgenes;
   
