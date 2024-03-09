@@ -596,7 +596,7 @@ router.route('/domain_results/').post(async (req, res) => {
   }
   else{
 
-    genes =body.genes
+    genes = body.genes || ''
     
   }
 
