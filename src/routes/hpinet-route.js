@@ -358,18 +358,19 @@ router.route('/annotation/').get(async (req, res) => {
 });
 
 function filterDuplicates(results) {
-  const uniqueResults = [];
   const seen = new Set();
+  const uniqueResults = [];
+
   for (const result of results) {
-    const jsonStr = JSON.stringify(result);
-    if (!seen.has(jsonStr)) {
-      seen.add(jsonStr);
-      uniqueResults.push(result);
-    }
+      const jsonStr = JSON.stringify(result);
+      if (!seen.has(jsonStr)) {
+          seen.add(jsonStr);
+          uniqueResults.push(result);
+      }
   }
+
   return uniqueResults;
 }
-
 
 router.route('/download/').get(async (req, res) => {
   try {
