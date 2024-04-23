@@ -167,12 +167,17 @@ def filter_domain( table, idt =None, genes=None, domdb=None):
                 query = "SELECT * FROM {} WHERE Pathogen_Protein IN {} AND intdb IN {};".format(table,ht, domdb)
                 results = mydb.execute(query).fetchall()
     else:
-        query = "SELECT * FROM {};".format(table)
+        query = "SELECT * FROM {} WHERE intdb IN {};".format(table, domdb)
+
         results = mydb.execute(query).fetchall()
 
     df= pd.DataFrame(results)
+
+    df.columns = ['id', 'Host_Protein', 'Pathogen_Protein', 'ProteinA', 'ProteinB', 'Score', 'DomainA_name', 'DomainA_desc', 'DomainA_interpro', 'DomainB_name', 'DomainB_desc', 'DomainB_interpro', 'intdb']
     
-    return df
+    dk = df[['Host_Protein', 'Pathogen_Protein', 'ProteinA', 'ProteinB', 'Score', 'DomainA_name', 'DomainA_desc', 'DomainA_interpro', 'DomainB_name', 'DomainB_desc', 'DomainB_interpro', 'intdb']]
+    
+    return dk
 
 
 def consensus(interolog, domain):
@@ -204,7 +209,9 @@ def main():
     results_list ={}
    
     intTables = options.ppitables.replace(' ','').split(",")
-    domtables = options.domdb.replace(' ','').split(",")
+    domt = options.domdb.replace(' ','').split(",")
+
+    domtables = tuple([word.upper() for word in domt])
     # print(options.genes)
     if options.genes:
         genes = open(os.path.join(os.getcwd(), "src/genes.txt")).readlines()[0]
@@ -272,17 +279,21 @@ def main():
                 results_list[hpd]=results
             
             
-        # try:
+        try:
             final = pd.concat(results_list.values(),ignore_index=True)
             con_final = consensus(interolog=final, domain=domain_result)
             con_final.reset_index(inplace=True, drop=True)
             rid = add_results(con_final.to_dict('records'))
 
             print(rid)
-            os.remove(os.path.join(os.getcwd(), "src/genes.txt"))
-        # except Exception:
-        #     rid = add_noresults("no results")
-        #     print(rid)
+
+            file_path= os.path.join(os.getcwd(), "src/genes.txt")
+
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception:
+            rid = add_noresults("no results")
+            print(rid)
 
         
 
