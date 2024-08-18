@@ -56,6 +56,28 @@ const DomainSchema = new mongoose.Schema({
   intdb: { type: String },
 });
 
+const ConsensusSchema = new mongoose.Schema({
+  Host_Protein: { type: String },
+  Pathogen_Protein: { type: String },
+  ProteinA_x: { type: String },
+  ProteinB_x: { type: String },
+  intdb_x: { type: String },
+  Method: { type: String },
+  Type: { type: String },
+  Confidence: { type: String },
+  PMID: { type: String },
+  ProteinA_y: { type: String },
+  ProteinB_y: { type: String },
+  score: { type: Number },
+  DomianA_name: { type: String },
+  DomainA_desc: { type: String },
+  DomianA_interpro: { type: String },
+  DomianB_name: { type: String },
+  DomainB_desc: { type: String },
+  DomianB_interpro: { type: String },
+  intdb: { type: String },
+})
+
 function splithost(string) {
   const cdsOrCdsRegex = /(cds|CDS)/i;
   const lastDotIndex = string.lastIndexOf('.');
@@ -279,7 +301,11 @@ router.route('/results/').get(async (req, res) => {
 
     if (category === 'interolog') {
       ResultsModel = resultsdb.model(results, wheatSchema);
-    } else if (category === 'gosim') {
+    }
+    else if (category === 'consensus'){
+      ResultsModel = resultsdb.model(results, ConsensusSchema);
+    }
+     else if (category === 'gosim') {
       ResultsModel = resultsdb.model(results, GOPPISchema);
     } else if (category === 'phylo') {
       ResultsModel = resultsdb.model(results, PhyloPPISchema);
