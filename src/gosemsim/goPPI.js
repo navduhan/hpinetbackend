@@ -12,26 +12,26 @@ const getGOPPI = (method, hspecies, pspecies, score, threshold, host_genes, path
 
 
   // Log the command that will be executed
-//   console.log(
-//     "/opt/miniconda3/envs/ml-gpu/bin/python3",
-//     [
-//       "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
-//       "--hgenes",
-//       host_genes2,
-//       "--pgenes",
-//       pathogen_genes,
-//       "--host",
-//       hspecies,
-//       "--pathogen",
-//       pspecies,
-//       "--method",
-//       method,
-//       "--score",
-//       score,
-//       "--t",
-//       threshold
-//     ].join(" ") // Combine command arguments into a string
-//   );
+  console.log(
+    "/opt/miniconda3/envs/ml-gpu/bin/python3",
+    [
+      "/home/dock_user/web/hpinetdb/hpinetbackend/src/gosemsim/goSemSim.py",
+      "--hgenes",
+      host_genes2,
+      "--pgenes",
+      pathogen_genes,
+      "--host",
+      hspecies,
+      "--pathogen",
+      pspecies,
+      "--method",
+      method,
+      "--score",
+      score,
+      "--t",
+      threshold
+    ].join(" ") // Combine command arguments into a string
+  );
 
   const commandArgs = [
     "/opt/miniconda3/envs/ml-gpu/bin/python3",
